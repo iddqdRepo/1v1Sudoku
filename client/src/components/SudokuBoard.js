@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles.css";
 
+//TODO = Get the puzzles from the database
 const ph = [
   {
     _id: "613496364c06d9c826dbb28d",
@@ -409,7 +410,7 @@ const SudokuBoard = () => {
               {puzzleGrid[0].map((cell) => {
                 return cell !== "" ? (
                   <td>
-                    <input key={id} className="00" type="text" maxLength="1" disabled={true} defaultValue={cell} />
+                    <input className="00" type="text" maxLength="1" disabled={true} defaultValue={cell} />
                   </td>
                 ) : (
                   <td>
@@ -417,35 +418,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input className="00" type="text" maxLength="1" disabled={puzzleGrid[0][0]} defaultValue={puzzleGrid[0][0]} />
-              </td>
-              <td>
-                <input className="01" type="text" maxLength="1" disabled={puzzleGrid[0][1]} defaultValue={puzzleGrid[0][1]} />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled={puzzleGrid[0][2]} defaultValue={puzzleGrid[0][2]} />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -457,39 +429,10 @@ const SudokuBoard = () => {
                   </td>
                 ) : (
                   <td>
-                    <input className="00" type="text" maxLength="1" disabled={false} defaultValue={cell} />
+                    <input className="00" type="text" maxLength="1" disabled={false} onChange={console.log("hi")} defaultValue={cell} />
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -505,35 +448,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -549,35 +463,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -593,35 +478,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -637,79 +493,21 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
-            {puzzleGrid[6].map((cell) => {
-              return cell !== "" ? (
-                <td>
-                  <input className="00" type="text" maxLength="1" disabled={true} defaultValue={cell} />
-                </td>
-              ) : (
-                <td>
-                  <input className="00" type="text" maxLength="1" disabled={false} defaultValue={cell} />
-                </td>
-              );
-            })}
             <tr>
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
+              {puzzleGrid[6].map((cell) => {
+                return cell !== "" ? (
+                  <td>
+                    <input className="00" type="text" maxLength="1" disabled={true} defaultValue={cell} />
+                  </td>
+                ) : (
+                  <td>
+                    <input className="00" type="text" maxLength="1" disabled={false} defaultValue={cell} />
+                  </td>
+                );
+              })}
             </tr>
           </tbody>
           <tbody>
@@ -725,35 +523,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
           <tbody>
@@ -769,35 +538,6 @@ const SudokuBoard = () => {
                   </td>
                 );
               })}
-              {/* <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td>
-              <td>
-                <input type="text" maxLength="1" disabled />
-              </td> */}
             </tr>
           </tbody>
         </table>
@@ -807,3 +547,34 @@ const SudokuBoard = () => {
 };
 
 export default SudokuBoard;
+{
+  /* <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td>
+              <td>
+                <input type="text" maxLength="1" disabled />
+              </td> */
+}

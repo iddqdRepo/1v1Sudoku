@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 //structure of the document
 const sudokuSchema = new Schema({
   puzzle: [],
+  solvedPuzzle: [],
   difficulty: String,
   createdAt: {
     type: Date,

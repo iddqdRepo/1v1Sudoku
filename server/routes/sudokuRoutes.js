@@ -1,5 +1,5 @@
 import express from "express";
-import { getEasy, getMedium } from "../controllers/sudokuController.js";
+import { getEasy, getMedium, getTest } from "../controllers/sudokuController.js";
 
 const router = express.Router();
 
@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.get("/easy", getEasy);
 router.get("/medium", getMedium);
+router.get("/test", getTest);
 
 export default router;

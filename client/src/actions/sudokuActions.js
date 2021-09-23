@@ -8,8 +8,9 @@ export const getEasy = () => async (dispatch) => {
   try {
     //first we're getting a response from the api, in the response we always have the data
     const { data } = await api.fetchEasyBoard(); //data = the posts from the server returned from axios.get in the api = all the posts from the localhost 5000 server
+    let randomBoard = Math.floor(Math.random() * data.length);
 
-    dispatch({ type: "FETCH_EASY", payload: data });
+    dispatch({ type: "FETCH_EASY", payload: data[randomBoard] });
   } catch (error) {
     console.log(error.message + " (in actions/posts.js)");
   }
@@ -20,8 +21,26 @@ export const getMedium = () => async (dispatch) => {
   try {
     //first we're getting a response from the api, in the response we always have the data
     const { data } = await api.fetchMediumBoard(); //data = the posts from the server returned from axios.get in the api = all the posts from the localhost 5000 server
+    let randomBoard = Math.floor(Math.random() * data.length);
 
-    dispatch({ type: "FETCH_MEDIUM", payload: data });
+    console.log(`fetched medium, data is`);
+    console.log(data[randomBoard]);
+    dispatch({ type: "FETCH_MEDIUM", payload: data[randomBoard] });
+  } catch (error) {
+    console.log(error.message + " (in actions/posts.js)");
+  }
+};
+
+export const getTest = () => async (dispatch) => {
+  //this is successfully using redux to pass/dispatch an action from our backend
+  try {
+    //first we're getting a response from the api, in the response we always have the data
+    const { data } = await api.fetchTestBoard(); //data = the posts from the server returned from axios.get in the api = all the posts from the localhost 5000 server
+    let randomBoard = Math.floor(Math.random() * data.length);
+
+    console.log(`fetched test, data is`);
+    console.log(data[randomBoard]);
+    dispatch({ type: "FETCH_TEST", payload: data[randomBoard] });
   } catch (error) {
     console.log(error.message + " (in actions/posts.js)");
   }

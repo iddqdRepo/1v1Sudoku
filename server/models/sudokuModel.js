@@ -16,10 +16,12 @@ const sudokuSchema = new Schema({
 //looks for the model name (Sudoku), pluralises it, the look for that collection inside the database
 const SudokuEasy = mongoose.model("Sudokueasy", sudokuSchema);
 const SudokuMeds = mongoose.model("Sudokumeds", sudokuSchema);
+const SudokuTest = mongoose.model("Sudokutest", sudokuSchema);
 
 let modelExport = {
   SudokuEasy,
   SudokuMeds,
+  SudokuTest,
 };
 
 export default modelExport;

@@ -28,3 +28,16 @@ export const getMedium = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const getTest = async (req, res) => {
+  //try to retrieve all the posts in the database
+  try {
+    //needs to have await becayse it is an async function
+    const sudokuTest = await modelExport.SudokuTest.find(); //running a command on mongoDB model to find all posts
+    console.log("retrieved sudoku Test Board from sudokuController.js");
+    res.status(200).json(sudokuTest);
+  } catch (error) {
+    console.log("error in controllers/sudokuController.js)");
+    res.status(404).json({ message: error.message });
+  }
+};

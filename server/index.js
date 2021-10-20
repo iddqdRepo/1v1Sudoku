@@ -6,6 +6,7 @@ import sudokuRoutes from "./routes/sudokuRoutes.js";
 import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { addUser, removeUser, getUser, getUsersInRoom, getDataInUserList } from "./users.js";
 
 dotenv.config();
 
@@ -33,7 +34,37 @@ const io = new Server(server, {
 app.use("/sudoku", sudokuRoutes);
 
 io.on("connection", (socket) => {
-  console.log("New WS connection..");
+  // console.log("New WS connection with id" + socket.id);
+
+  socket.on("join_room", (payload, callback) => {
+    //payload is info, callback is error
+
+    let numberOfUsersInRoom = getUsersInRoom(payload.room).length;
+    const { error, newUser } = addUser({
+      userId: socket.id,
+      username: numberOfUsersInRoom === 0 ? "Player 1" : "Player 2",
+      room: payload.room,
+    });
+
+    //If there are more than two people in a room, return an error
+    if (error) return callback(error);
+
+    console.log("error is: ", error);
+
+    socket.join(payload.room);
+    console.log("num users in room ", payload.room, "is ", getUsersInRoom(payload.room).length);
+
+    // console.log("user list data: ", getDataInUserList());
+
+    //TODO only emit roomData if there is a newUser returned, otherwise error is returned and it crashes
+    io.to(newUser.room).emit("roomData", { room: newUser.room, users: getUsersInRoom(newUser.room) });
+    let allData = getDataInUserList();
+    console.log("allData", allData);
+
+    //emits all user data to be stored in AllUsersRoomsData in homepage
+    io.to(newUser.room).emit("allUserData", allData);
+    console.log("alldataObj = ", { allData });
+  });
 
   //Welcome connected user
   socket.emit("message", "Welcome to Sudoku!");
@@ -43,7 +74,8 @@ io.on("connection", (socket) => {
 
   //tell other person has disconnected
   socket.on("disconnect", () => {
-    io.emit("message", "a user has left the game");
+    console.log(`${socket.id} has left the game`);
+    io.emit("message", `${socket.id} has left the game`);
   });
 });
 

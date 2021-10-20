@@ -1,11 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 function CreateGame() {
+  let roomId = useSelector((state) => state.sudokuReducers);
+
   return (
     <div>
       <div className="CreateGamePageContainer">
         <div className="CodeText">Your Code is:</div>
-        <div className="Code">12Qus12</div>
+        <div className="Code">{roomId}</div>
         <div className="Loading-ring">
           <div></div>
           <div></div>

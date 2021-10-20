@@ -7,6 +7,8 @@ export default (sudokuReducers = [], action) => {
         return action.payload;
       case "FETCH_TEST":
         return action.payload;
+        case "ROOM_ID":
+          return action.payload;
       default:
         return [];
     }

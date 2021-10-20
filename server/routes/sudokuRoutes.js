@@ -9,5 +9,6 @@ const router = express.Router();
 router.get("/easy", getEasy);
 router.get("/medium", getMedium);
 router.get("/test", getTest);
+// router.get("/users", getUsers);
 
 export default router;

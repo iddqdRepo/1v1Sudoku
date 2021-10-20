@@ -12,7 +12,7 @@ export const getEasy = () => async (dispatch) => {
 
     dispatch({ type: "FETCH_EASY", payload: data[randomBoard] });
   } catch (error) {
-    console.log(error.message + " (in actions/posts.js)");
+    console.log(error.message + " getEasy Failed (in actions/sudokuActions.js)");
   }
 };
 
@@ -27,7 +27,7 @@ export const getMedium = () => async (dispatch) => {
     console.log(data[randomBoard]);
     dispatch({ type: "FETCH_MEDIUM", payload: data[randomBoard] });
   } catch (error) {
-    console.log(error.message + " (in actions/posts.js)");
+    console.log(error.message + " getMedium Failed (in actions/sudokuActions.js)");
   }
 };
 
@@ -42,6 +42,26 @@ export const getTest = () => async (dispatch) => {
     console.log(data[randomBoard]);
     dispatch({ type: "FETCH_TEST", payload: data[randomBoard] });
   } catch (error) {
-    console.log(error.message + " (in actions/posts.js)");
+    console.log(error.message + " getTest Failed (in actions/sudokuActions.js)");
+  }
+};
+
+export const getRoom = () => async (dispatch) => {
+  //this is successfully using redux to pass/dispatch an action from our backend
+  try {
+    console.log("FETCHING ROOM ID");
+    let output = "";
+    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let charactersLength = characters.length;
+    for (let i = 0; i < 5; i++) {
+      output += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    const roomId = output;
+
+    console.log(`Random ID fetched, code: ` + output);
+    dispatch({ type: "ROOM_ID", payload: roomId });
+  } catch (error) {
+    console.log(error.message + " (roomID Failed)");
   }
 };

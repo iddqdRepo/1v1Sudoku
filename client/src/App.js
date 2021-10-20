@@ -9,13 +9,10 @@ import Homepage from "./components/Homepage";
 import CreateGame from "./components/CreateGame";
 
 const socket = io.connect("http://localhost:5000");
+
 socket.on("message", (message) => {
   console.log(message);
 });
-//TODO - Get sudoku board from DB, redux
-//the dispatching works etc (/post/post.js)
-//should the store retrieve a random easy sudoku, and use that as the payload? then I can get the id from that
-//and fetch the same one for the other person? or just show them the same one.
 
 function App() {
   const dispatch = useDispatch();
@@ -31,7 +28,12 @@ function App() {
 
   return Array.isArray(sudokuBoardFromReducers) ? (
     <>
-      <h1>Nothing yet m8</h1>
+      <div className="Loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </>
   ) : (
     <>
@@ -41,9 +43,7 @@ function App() {
             <Homepage />
             {/* <SudokuBoard board={sudokuBoardFromReducers} /> */}
           </Route>
-          <Route path="/creategame">
-            <CreateGame />
-          </Route>
+          <Route path="/play" exact component={CreateGame}></Route>
 
           <Route path="/sudoku">
             {console.log(sudokuBoardFromReducers)}

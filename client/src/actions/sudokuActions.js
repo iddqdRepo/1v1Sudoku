@@ -38,8 +38,8 @@ export const getTest = () => async (dispatch) => {
     const { data } = await api.fetchTestBoard(); //data = the posts from the server returned from axios.get in the api = all the posts from the localhost 5000 server
     let randomBoard = Math.floor(Math.random() * data.length);
 
-    console.log(`fetched test, data is`);
-    console.log(data[randomBoard]);
+    // console.log(`fetched test, data is`);
+    // console.log(data[randomBoard]);
     dispatch({ type: "FETCH_TEST", payload: data[randomBoard] });
   } catch (error) {
     console.log(error.message + " getTest Failed (in actions/sudokuActions.js)");
@@ -49,7 +49,7 @@ export const getTest = () => async (dispatch) => {
 export const getRoom = () => async (dispatch) => {
   //this is successfully using redux to pass/dispatch an action from our backend
   try {
-    console.log("FETCHING ROOM ID");
+    // console.log("FETCHING ROOM ID");
     let output = "";
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let charactersLength = characters.length;
@@ -59,9 +59,22 @@ export const getRoom = () => async (dispatch) => {
 
     const roomId = output;
 
-    console.log(`Random ID fetched, code: ` + output);
+    // console.log(`Random ID fetched, code: ` + output);
     dispatch({ type: "ROOM_ID", payload: roomId });
   } catch (error) {
     console.log(error.message + " (roomID Failed)");
+  }
+};
+
+export const getAllUsers = () => async (dispatch) => {
+  //this is successfully using redux to pass/dispatch an action from our backend
+  try {
+    console.log("FETCHING ALL USERS");
+    const { data } = await api.fetchUsers();
+
+    // console.log(`Random ID fetched, code: ` + output);
+    dispatch({ type: "ALL_USERS", payload: data });
+  } catch (error) {
+    console.log(error.message + " (ALL_USERS Failed)");
   }
 };

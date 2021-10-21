@@ -1,5 +1,9 @@
 // prettier-ignore
-export default (sudokuReducers = [], action) => {
+// const initialState = {
+
+// }
+
+export default (state = {}, action) => {
     switch (action.type) {
       case "FETCH_EASY":
         return action.payload;
@@ -7,9 +11,7 @@ export default (sudokuReducers = [], action) => {
         return action.payload;
       case "FETCH_TEST":
         return action.payload;
-        case "ROOM_ID":
-          return action.payload;
       default:
-        return [];
+        return state;
     }
   }

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getEasy, getMedium, getTest } from "./actions/sudokuActions";
+import { getEasy, getMedium, getTest, getRoom, getAllUsers } from "./actions/sudokuActions";
 import { io } from "socket.io-client";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -20,15 +20,16 @@ function App() {
   useEffect(() => {
     console.log("dispatching getTest");
     dispatch(getTest()); //dispatching the action from ./actions/posts - redux
+    dispatch(getAllUsers());
   }, [dispatch]);
 
   let sudokuBoardFromReducers = useSelector((state) => state.sudokuReducers);
-  // console.log("sudokuBoardFromReducers");
-  // console.log(sudokuBoardFromReducers);
+  console.log("sudokuBoardFromReducers", sudokuBoardFromReducers);
 
   return Array.isArray(sudokuBoardFromReducers) ? (
     <>
       <div className="Loading-ring">
+        {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
         <div></div>
         <div></div>
         <div></div>
@@ -46,7 +47,7 @@ function App() {
           <Route path="/play" exact component={CreateGame}></Route>
 
           <Route path="/sudoku">
-            {console.log(sudokuBoardFromReducers)}
+            {/* {console.log(sudokuBoardFromReducers)} */}
             <SudokuBoard board={sudokuBoardFromReducers} />
           </Route>
         </Switch>

@@ -20,11 +20,12 @@ function Homepage() {
 
   useEffect(() => {
     // getAllUsers();
-    console.log("dispatching getTest");
+    console.log("dispatching homepage getRoom");
     dispatch(getRoom()); //dispatching the action from ./actions/posts - redux
   }, [dispatch]);
 
-  let roomId = useSelector((state) => state.sudokuReducers);
+  let roomId = useSelector((state) => state.roomCodeReducer);
+  console.log("room ID in roomId ", roomId);
 
   let createRoom = (room) => {
     console.log("Creating room, " + room + " adding room to list ");
@@ -38,6 +39,8 @@ function Homepage() {
     //? This gives me access to the data of the users that are in the current room
     //? socket.emit and socket.on seems to be able to go both ways, emitted from client, or server, which is cool
     socket.on("roomData", ({ users }) => {
+      //! index.js:1 Warning: Can't perform a React state update on an unmounted component.
+      //! https://stackoverflow.com/questions/67055556/error-cant-perform-a-react-state-update-on-an-unmounted-component
       setUsers(users);
       console.log("CreateRoom setUsersRooms is ", users);
     });

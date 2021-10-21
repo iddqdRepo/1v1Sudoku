@@ -13,9 +13,10 @@ dotenv.config();
 console.log();
 
 const app = express();
+
 const server = createServer(app); //for server to handle socket.io
 
-app.use(express.json({ limit: "30mb", extended: true }));
+app.use(express.json({ limit: "30mb", extended: true })); //every requrest that comes in will go through this middleware and be converted to JSON
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 const io = new Server(server, {

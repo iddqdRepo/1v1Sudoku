@@ -47,24 +47,30 @@ io.on("connection", (socket) => {
       room: payload.room,
     });
 
+    // socket.on("testCall", (payload, callback) =>{
+    //   io.to(payload.room).emit("roomData", { room: newUser.room, users: getUsersInRoom(newUser.room) });
+
+    // })
+
     //If there are more than two people in a room, return an error
     if (error) return callback(error);
 
     console.log("error is: ", error);
 
-    socket.join(payload.room);
-    console.log("num users in room ", payload.room, "is ", getUsersInRoom(payload.room).length);
+    socket.join(newUser.room);
+    console.log("num users in room ", newUser.room, "is ", getUsersInRoom(newUser.room).length);
 
     // console.log("user list data: ", getDataInUserList());
 
     //TODO only emit roomData if there is a newUser returned, otherwise error is returned and it crashes
+    console.log("Emitting to NewUser.room: ", newUser.room, "room data: ", { room: newUser.room, users: getUsersInRoom(newUser.room) });
     io.to(newUser.room).emit("roomData", { room: newUser.room, users: getUsersInRoom(newUser.room) });
-    let allData = getDataInUserList();
-    console.log("allData", allData);
 
-    //emits all user data to be stored in AllUsersRoomsData in homepage
-    io.to(newUser.room).emit("allUserData", allData);
-    console.log("alldataObj = ", { allData });
+    // let allData = getDataInUserList();
+    // console.log("allData", allData);
+    // //emits all user data to be stored in AllUsersRoomsData in homepage
+    // io.to(newUser.room).emit("allUserData", allData);
+    // console.log("alldataObj = ", allData);
   });
 
   //Welcome connected user

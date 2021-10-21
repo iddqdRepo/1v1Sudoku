@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { io } from "socket.io-client";
-import { getRoom } from "../actions/sudokuActions";
+import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../api";
 
@@ -10,7 +10,7 @@ import * as api from "../api";
 function Homepage() {
   const [val, setVal] = useState("");
   const [users, setUsers] = useState([]);
-  const [allUsersRoomsData, setAllUsersRoomsData] = useState("");
+  const [allUsersRoomsData, setAllUsersRoomsData] = useState([]);
   const [roomFull, setRoomFull] = useState(false);
 
   let history = useHistory();
@@ -25,33 +25,9 @@ function Homepage() {
   }, [dispatch]);
 
   let roomId = useSelector((state) => state.roomCodeReducer);
+  let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
   console.log("room ID in roomId ", roomId);
-
-  let createRoom = (room) => {
-    console.log("Creating room, " + room + " adding room to list ");
-    socket.emit("join_room", { room: room }, (error) => {
-      console.log("emit joinroom name," + room);
-      if (error) console.log("ERROR CREATING ROOM");
-    });
-
-    //? When the room is created on the server, it emits the data (from server to client instead of client to server) with "io.to(newUser.room).emit("roomData")"
-    //? This socket.on grabs that emitted roomData and stores it in the useState variable here
-    //? This gives me access to the data of the users that are in the current room
-    //? socket.emit and socket.on seems to be able to go both ways, emitted from client, or server, which is cool
-    socket.on("roomData", ({ users }) => {
-      //! index.js:1 Warning: Can't perform a React state update on an unmounted component.
-      //! https://stackoverflow.com/questions/67055556/error-cant-perform-a-react-state-update-on-an-unmounted-component
-      setUsers(users);
-      console.log("CreateRoom setUsersRooms is ", users);
-    });
-
-    socket.on("allUserData", (allUsersRoomsData) => {
-      console.log("ALLUSERDATAEMITED");
-      console.log("allUserData is ", allUsersRoomsData);
-      setAllUsersRoomsData(allUsersRoomsData);
-      console.log(console.log("createRoom AllUsersRoomsData is ", allUsersRoomsData));
-    });
-  };
+  console.log("allUsersTestCheck: ", allUsersTestCheck);
 
   let joinRoom = (roomToJoin) => {
     console.log("Joining room, " + roomToJoin);
@@ -62,34 +38,34 @@ function Homepage() {
       console.log("ERROR CREATING ROOM");
     });
 
-    //? This gives me access to the data of the users that are in the current room
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
-      console.log("JoinRoom setUsersRooms is ", users);
-    });
+    // //? This gives me access to the data of the users that are in the current room
+    // socket.on("roomData", ({ users }) => {
+    //   setUsers(users);
+    //   console.log("JoinRoom setUsersRooms is ", users);
+    // });
 
-    socket.on("allUserData", (data) => {
-      setAllUsersRoomsData(data);
-      console.log(console.log("JoinRoom AllUsersRoomsData is ", allUsersRoomsData));
-    });
+    // socket.on("allUserData", (data) => {
+    //   setAllUsersRoomsData(data);
+    //   console.log("JoinRoom AllUsersRoomsData is ", allUsersRoomsData);
+    // });
   };
 
   let startGame = (val) => {
     history.push("/sudoku");
   };
 
+  let checkAllUser = () => {
+    console.log("-----TESTING-----");
+    console.log("allUsersTestCheck: ", allUsersTestCheck);
+    console.log("allUsersRoomsData: ", allUsersRoomsData);
+    console.log("users: ", users);
+  };
+
   return (
     <div className="HomepageContainer">
       <div className="CreateGameContainer">
         <Link to={`/play?roomCode=${roomId}`}>
-          <button
-            className="JoinCreateBtn"
-            onClick={() => {
-              createRoom(roomId);
-            }}
-          >
-            Create Game
-          </button>
+          <button className="JoinCreateBtn">Create Game</button>
         </Link>
       </div>
       <div className="TestStartGameCreateGameContainer">
@@ -111,8 +87,8 @@ function Homepage() {
             setVal(e.target.value);
           }}
         ></input>
-        <button className="JoinCreateBtn" onClick={() => console.log(users)}>
-          CheckList
+        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
+          Check all user list
         </button>
       </div>
     </div>

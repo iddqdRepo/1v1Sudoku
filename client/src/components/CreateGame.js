@@ -1,49 +1,122 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllUsers } from "../actions/sudokuActions";
+import { getAllUsers, getEasy } from "../actions/sudokuActions";
+import { useHistory, Link, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
+let movedToGame = false;
+
+//! IT WOORRRRRRRRRRRKS - But it doesnt update the store, is that an issue?
+//TODO MAIN - Sudoku board passed as props to usehistory, get it to emit to other player in room and start with same board
+//TODO  - Figure out why certain things trigger so many useEffect functions, Is this a bad thing?
 
 function CreateGame() {
   const dispatch = useDispatch();
-  const [us, setUs] = useState([]);
+  const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]);
+  const [currentUser, setCurrentUser] = useState([]);
+  let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
+  let roomId = useSelector((state) => state.roomCodeReducer);
+  let history = useHistory();
+  let sudokuBoard = useSelector((state) => state.sudokuReducers);
+  console.log("SUDOKU BOARD IS: ", sudokuBoard);
 
   useEffect(() => {
     dispatch(getAllUsers());
-    // console.log("----- USE EFFECT CALL ----------");
+    dispatch(getEasy());
+    // console.log("----- USE EFFECT CALL GET ALL USERS IN CREATEGAME ----------");
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("----- CREATEGAME JOIN ROOM USE EFFECT CALL ----------");
     socket.emit("join_room", { room: roomId }, (error) => {
       console.log("emit joinroom name," + roomId);
       if (error) console.log("ERROR CREATING ROOM");
     });
 
-    console.log("----- USE EFFECT CALL ----------");
+    //TODO - Remove from the list when user disconnects from creategame
+    return function cleanup() {
+      // socket.disconnect(); --- this causes the can't create room again error
+      console.log("MOVED TO GAME IS ", movedToGame);
+      if (!movedToGame) {
+        console.log("CLEANUP INITIATED");
+        //shut down connnection instance
+        socket.off();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("----- CREATEGAME USE EFFECT CALL ----------");
     //? When the room is created on the server, it emits the data (from server to client instead of client to server) with "io.to(newUser.room).emit("roomData")"
     //? This socket.on grabs that emitted roomData and stores it in the useState variable here
     //? This gives me access to the data of the users that are in the current room
     //? socket.emit and socket.on seems to be able to go both ways, emitted from client, or server, which is cool
-    socket.on("roomData", (u) => {
-      setUs(u);
-      console.log("CreateRoom u is ", u);
-      console.log("CreateRoom setUsersRooms is ", us);
+    socket.on("roomData", (UserRoomData) => {
+      setRoomAndUsersInRoom(UserRoomData);
+      // console.log("UserRoomData : ", UserRoomData);
+    });
+
+    socket.on("currentUserData", (currUser) => {
+      setCurrentUser(currUser);
+      // nonStateSetCurrentUser = currUser;
+    });
+
+    socket.on("message", (msg) => {
+      // setCurrentUser(currUser);
+      console.log("message = ", msg);
     });
   }, []);
 
-  let roomId = useSelector((state) => state.roomCodeReducer);
-
-  console.log("Creating room, " + roomId + " adding room to list ");
+  console.log("CreateRoom setUsersRooms is ", roomAndUsersInRoom);
+  console.log("CreateRoom current user is ", currentUser);
 
   let checkAllUser = () => {
     console.log("-----TESTING-----");
-    console.log("users: ", us);
+    console.log("users: ", roomAndUsersInRoom);
+    console.log("Current User: ", currentUser);
+    //TODO Make it dispatch and check the contents of the room from the store
+    let countUsersInRoom = roomAndUsersInRoom.users.length;
+    let userusers = countUsersInRoom < 2 ? "user" : "users";
+    console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, userusers, " in it");
+  };
+
+  let startGame = () => {
+    console.log("-----START GAME-----");
+    movedToGame = true;
+    console.log("users: ", roomAndUsersInRoom);
+    console.log("Current User: ", currentUser);
+    //TODO Make it dispatch and check the contents of the room from the store
+    let countUsersInRoom = roomAndUsersInRoom.users.length;
+    console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, "users in it");
+
+    socket.emit("start_game", sudokuBoard, (error) => {
+      console.log("emit start game," + roomId);
+      if (error) return console.log("ERROR STARTING GAME");
+    });
+    // history.push();
+    history.push({
+      pathname: `/sudoku`,
+      search: `?roomCode=${roomId}`,
+      state: {
+        detail: sudokuBoard,
+      },
+    });
   };
 
   // let roomId = "creategame";
-
-  return (
+  return roomAndUsersInRoom.users === undefined ? (
+    <>
+      <div className="Loading-ring">
+        {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </>
+  ) : roomAndUsersInRoom.users.length < 2 ? (
     <div>
+      {console.log(roomAndUsersInRoom)}
       <div className="CreateGamePageContainer">
         <div className="CodeText">Your Code is:</div>
         <div className="Code">{roomId}</div>
@@ -57,6 +130,17 @@ function CreateGame() {
           Check users in room
         </button>
         <div className="Waiting">Waiting for other player to join</div>
+      </div>
+    </div>
+  ) : (
+    <div>
+      <div className="CreateGamePageContainer">
+        <div className="CodeText">Player 2 has joined </div>
+        <div className="Code">Start the game when you're ready</div>
+        <div className="Waiting"></div>
+        <button className="JoinCreateBtn" onClick={() => startGame()}>
+          Start Game
+        </button>
       </div>
     </div>
   );

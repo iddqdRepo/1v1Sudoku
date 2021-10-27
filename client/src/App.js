@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import SudokuBoard from "./components/SudokuBoard";
 import Homepage from "./components/Homepage";
 import CreateGame from "./components/CreateGame";
+import JoinGame from "./components/JoinGame";
 
 const socket = io.connect("http://localhost:5000");
 
@@ -17,26 +18,29 @@ socket.on("message", (message) => {
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("dispatching getTest");
-    dispatch(getTest()); //dispatching the action from ./actions/posts - redux
-    dispatch(getAllUsers());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log("dispatching getTest");
+  //   dispatch(getEasy()); //dispatching the action from ./actions/posts - redux
+  //   dispatch(getAllUsers());
+  // }, [dispatch]);
 
-  let sudokuBoardFromReducers = useSelector((state) => state.sudokuReducers);
-  console.log("sudokuBoardFromReducers", sudokuBoardFromReducers);
+  // let sudokuBoardFromReducers = useSelector((state) => state.sudokuReducers); //This is causing Creategame to render again
+  // let sudokuBoardFromReducers = {};
 
-  return Array.isArray(sudokuBoardFromReducers) ? (
-    <>
-      <div className="Loading-ring">
-        {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </>
-  ) : (
+  // console.log("sudokuBoardFromReducers", sudokuBoardFromReducers);
+
+  // return Array.isArray(sudokuBoardFromReducers) ? (
+  //   <>
+  //     <div className="Loading-ring">
+  //       {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
+  //       <div></div>
+  //       <div></div>
+  //       <div></div>
+  //       <div></div>
+  //     </div>
+  //   </>
+  // ) :
+  return (
     <>
       <Router>
         <Switch>
@@ -44,11 +48,13 @@ function App() {
             <Homepage />
             {/* <SudokuBoard board={sudokuBoardFromReducers} /> */}
           </Route>
-          <Route path="/play" exact component={CreateGame}></Route>
+          <Route path="/create" exact component={CreateGame}></Route>
+          <Route path="/join" exact component={JoinGame}></Route>
 
           <Route path="/sudoku">
             {/* {console.log(sudokuBoardFromReducers)} */}
-            <SudokuBoard board={sudokuBoardFromReducers} />
+            {/* <SudokuBoard board={sudokuBoardFromReducers} /> */}
+            <SudokuBoard />
           </Route>
         </Switch>
       </Router>

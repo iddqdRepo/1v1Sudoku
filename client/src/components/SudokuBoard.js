@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "../styles.css";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const SudokuBoard = (props) => {
+  const location = useLocation();
   // let board = useSelector((state) => state.sudokuReducers);
-  let [board, setBoard] = useState(props.board);
-  let [finishedBoard, setfinishedBoard] = useState(props.board.solvedPuzzle);
+  // console.log("location.state.detail is: ", location.state.detail);
+  // console.log("location.state.detail.solvedpuzzle is: ", location.state.detail.solvedPuzzle);
+  // console.log("location.state.detail.puzzle is: ", location.state.detail.puzzle);
+  let [board, setBoard] = useState(location.state.detail);
+  let [finishedBoard, setfinishedBoard] = useState(location.state.detail.solvedPuzzle);
   console.log("finishedBoard is:");
   console.log(finishedBoard);
 
@@ -14,8 +19,9 @@ const SudokuBoard = (props) => {
   //   console.log(board);
   // }, [board]);
   // console.log(board);
+
   let checkFinish = () => {
-    console.log("finished");
+    console.log("check finished");
   };
 
   return (

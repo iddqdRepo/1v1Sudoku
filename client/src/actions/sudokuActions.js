@@ -69,7 +69,7 @@ export const getRoom = () => async (dispatch) => {
 export const getAllUsers = () => async (dispatch) => {
   //this is successfully using redux to pass/dispatch an action from our backend
   try {
-    console.log("FETCHING ALL USERS");
+    console.log("FETCHING ALL USERS (action)");
     const { data } = await api.fetchUsers();
 
     // console.log(`Random ID fetched, code: ` + output);

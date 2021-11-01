@@ -37,6 +37,7 @@
     If host closes tab, it informs them the game is closed with a button to go back to home screen
 
  * Sudoku board
+    Add hards
     UI  
 
 

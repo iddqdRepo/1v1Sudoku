@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
+import { getAllUsers, getEasy, getMedium } from "../actions/sudokuActions";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
@@ -32,9 +32,10 @@ function CreateGame() {
     } else if (chosenDifficulty === "medium") {
       console.log("CHOSEN DIFFICULTY IS MEDIUM - DISPATCHING MEDIUM");
       dispatch(getMedium());
-    } else if (chosenDifficulty === "test") {
-      dispatch(getTest());
     }
+    // else if(chosenDifficulty === "hard"){
+    //   dispatch(getHard());
+    // }
 
     // console.log("----- USE EFFECT CALL GET ALL USERS IN CREATEGAME ----------");
   }, [dispatch]);

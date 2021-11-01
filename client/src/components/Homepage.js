@@ -70,7 +70,7 @@ function Homepage() {
     }
 
     history.push({
-      pathname: `/join`,
+      pathname: `/create`,
       search: `?roomCode=${roomId}`,
       state: {
         detail: difficulty,
@@ -93,13 +93,13 @@ function Homepage() {
       </div>
       <div onChange={chooseDifficulty}>
         <div>
-          <input type="radio" value="EASY" name="gender" /> Easy
+          <input type="radio" value="easy" name="gender" /> Easy
         </div>
         <div>
-          <input type="radio" value="MEDIUM" name="gender" /> Med
+          <input type="radio" value="medium" name="gender" /> Med
         </div>
         <div>
-          <input type="radio" value="HARD" name="gender" /> Hrd
+          <input type="radio" value="test" name="gender" /> test
         </div>
       </div>
 

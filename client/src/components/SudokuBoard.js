@@ -38,6 +38,10 @@ const SudokuBoard = (props) => {
   let checkFinish = () => {
     console.log("check finished");
     //check if board is correct logic
+    if (JSON.stringify(board.puzzle) === JSON.stringify(board.solvedPuzzle)) {
+      return console.log("SOLVED YO");
+    }
+    return console.log("Not solved");
 
     // socket.emit("end_game", (error) => {
     //   if (error) return console.log("ERROR ENDING GAME");
@@ -117,7 +121,7 @@ const SudokuBoard = (props) => {
             <li>
               <div className="vertical-adjust">
                 <div>Press when done</div>
-                <button id="finished-button" className="timer">
+                <button id="finished-button" className="timer" onClick={() => checkFinish()}>
                   Finished
                 </button>
               </div>

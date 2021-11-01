@@ -18,42 +18,17 @@ socket.on("message", (message) => {
 function App() {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log("dispatching getTest");
-  //   dispatch(getEasy()); //dispatching the action from ./actions/posts - redux
-  //   dispatch(getAllUsers());
-  // }, [dispatch]);
-
-  // let sudokuBoardFromReducers = useSelector((state) => state.sudokuReducers); //This is causing Creategame to render again
-  // let sudokuBoardFromReducers = {};
-
-  // console.log("sudokuBoardFromReducers", sudokuBoardFromReducers);
-
-  // return Array.isArray(sudokuBoardFromReducers) ? (
-  //   <>
-  //     <div className="Loading-ring">
-  //       {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
-  //       <div></div>
-  //       <div></div>
-  //       <div></div>
-  //       <div></div>
-  //     </div>
-  //   </>
-  // ) :
   return (
     <>
       <Router>
         <Switch>
           <Route exact path="/">
             <Homepage />
-            {/* <SudokuBoard board={sudokuBoardFromReducers} /> */}
           </Route>
           <Route path="/create" exact component={CreateGame}></Route>
           <Route path="/join" exact component={JoinGame}></Route>
 
           <Route path="/sudoku">
-            {/* {console.log(sudokuBoardFromReducers)} */}
-            {/* <SudokuBoard board={sudokuBoardFromReducers} /> */}
             <SudokuBoard />
           </Route>
         </Switch>

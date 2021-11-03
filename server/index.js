@@ -68,6 +68,7 @@ io.on("connection", (socket) => {
     io.to(newUser.userId).emit("currentUserData", { name: newUser.userId });
 
     //? This works for letting the other user know a user has joined their game
+    console.log("newUser.room", newUser.room);
     io.in(newUser.room).emit("message", "A User has joined your room");
     io.to(newUser.room).emit("roomData", { room: newUser.room, users: getUsersInRoom(newUser.room) });
   });
@@ -78,10 +79,30 @@ io.on("connection", (socket) => {
     console.log("socket id is: ", socket.id);
     const user = getUser(socket.id);
     console.log("user is: ", user);
+    // const userRoom = user.room;
+
     if (user) {
       io.in(user.room).emit("startGameData", payload);
       console.log("user true, user is: ", user);
     }
+  });
+
+  socket.on("end_game", (payload) => {
+    //emit to users in room
+    console.log("in end game");
+
+    // console.log("socket id is: ", socket.id);
+    console.log("payload user is: ", payload);
+    const user = getUser(payload);
+    console.log("user is: ", user);
+    console.log("userROOM is: ", user.room);
+    io.to(user.room).emit("endgameemit", user.userId);
+
+    // if (user) {
+    //   console.log("user true, user is: ", user);
+    //   console.log("user.room true, user.room is: ", user.room);
+    //   io.in(user.room).emit("endgameemit", { winner: user.username });
+    // }
   });
 
   //Welcome connected user

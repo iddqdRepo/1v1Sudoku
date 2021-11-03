@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getEasy, getMedium, getTest, getRoom, getAllUsers } from "./actions/sudokuActions";
+import { useDispatch } from "react-redux";
+// import { getEasy, getMedium, getTest, getRoom, getAllUsers } from "./actions/sudokuActions";
 import { io } from "socket.io-client";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 

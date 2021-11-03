@@ -9,7 +9,7 @@ import App from "./App";
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 store.subscribe(() => {
-  console.log("store changed", store.getState());
+  // console.log("store changed", store.getState());
 });
 ReactDOM.render(
   <Provider store={store}>

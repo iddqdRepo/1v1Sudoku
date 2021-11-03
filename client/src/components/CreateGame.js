@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
-import { useHistory, Link, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
 let movedToGame = false;
+let currentUser = {};
 
 //! IT WOORRRRRRRRRRRKS - But it doesnt update the store, is that an issue?
 //TODO MAIN - Sudoku board passed as props to usehistory, get it to emit to other player in room and start with same board
@@ -14,10 +15,10 @@ function CreateGame() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]);
-  const [currentUser, setCurrentUser] = useState([]);
+  // const [currentUser, setCurrentUser] = useState([]);
   // const [chosenDifficulty, setChosenDifficulty] = useState("")
   let chosenDifficulty = location.state.detail;
-  let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
+  // let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
   let roomId = useSelector((state) => state.roomCodeReducer);
   let history = useHistory();
   let sudokuBoard = useSelector((state) => state.sudokuReducers);
@@ -65,28 +66,52 @@ function CreateGame() {
     //? This gives me access to the data of the users that are in the current room
     //? socket.emit and socket.on seems to be able to go both ways, emitted from client, or server, which is cool
     socket.on("roomData", (UserRoomData) => {
+      console.log("socket.on(roomData - creategame");
       setRoomAndUsersInRoom(UserRoomData);
       // console.log("UserRoomData : ", UserRoomData);
     });
 
     socket.on("currentUserData", (currUser) => {
-      setCurrentUser(currUser);
+      // setCurrentUser(currUser);
+      currentUser = currUser;
+      console.log("socket.on(currentUserData - creategame - user is ", currentUser);
       // nonStateSetCurrentUser = currUser;
     });
 
     socket.on("message", (msg) => {
+      console.log("socket.on(message - creategame ", msg);
       // setCurrentUser(currUser);
-      console.log("message = ", msg);
+      // console.log("message = ", msg);
     });
   }, []);
 
-  console.log("CreateRoom setUsersRooms is ", roomAndUsersInRoom);
-  console.log("CreateRoom current user is ", currentUser);
+  useEffect(() => {
+    socket.on("endgameemit", (payload) => {
+      console.log("socket.on(end_game_emit - SudokuBoard");
+      console.log(payload, " has won");
+      console.log("currentUser is: ", currentUser.name);
+      if (payload === currentUser.name) {
+        history.push({
+          pathname: `/hey`,
+          search: `Winner`,
+        });
+      } else {
+        history.push({
+          pathname: `/hey`,
+          search: `Loser`,
+        });
+      }
+      // if (error) return console.log("ERROR FINISHING GAME");
+    });
+  }, []);
+
+  // console.log("CreateRoom setUsersRooms is ", roomAndUsersInRoom);
+  // console.log("CreateRoom current user is ", currentUser);
 
   let checkAllUser = () => {
-    console.log("-----TESTING-----");
-    console.log("users: ", roomAndUsersInRoom);
-    console.log("Current User: ", currentUser);
+    // console.log("-----TESTING-----");
+    // console.log("users: ", roomAndUsersInRoom);
+    // console.log("Current User: ", currentUser);
     //TODO Make it dispatch and check the contents of the room from the store
     let countUsersInRoom = roomAndUsersInRoom.users.length;
     let userusers = countUsersInRoom < 2 ? "user" : "users";
@@ -96,14 +121,14 @@ function CreateGame() {
   let startGame = () => {
     console.log("-----START GAME-----");
     movedToGame = true;
-    console.log("users: ", roomAndUsersInRoom);
-    console.log("Current User: ", currentUser);
+    // console.log("users: ", roomAndUsersInRoom);
+    // console.log("Current User: ", currentUser);
     //TODO Make it dispatch and check the contents of the room from the store
     let countUsersInRoom = roomAndUsersInRoom.users.length;
-    console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, "users in it");
+    // console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, "users in it");
 
     socket.emit("start_game", sudokuBoard, (error) => {
-      console.log("emit start game," + roomId);
+      console.log("EMIT START_GAME " + roomId, " - creategame");
       if (error) return console.log("ERROR STARTING GAME");
     });
     // history.push();
@@ -111,7 +136,7 @@ function CreateGame() {
       pathname: `/sudoku`,
       search: `?roomCode=${roomId}`,
       state: {
-        detail: sudokuBoard,
+        detail: { sudokuBoard, currentUser },
       },
     });
   };

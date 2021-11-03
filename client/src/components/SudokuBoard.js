@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../styles.css";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
+let endGame = false;
 
-//TODO - when player enters a number, store it in playingBoard, it is currently updating board also though
-//? board must be being updated on onChange??
+//TODO - fix playingBoard - it needs to get the row and column to update from the return
 
 //TODO - If the finished button is pressed
 //? compare board to finished board
@@ -16,50 +16,72 @@ const socket = io.connect("http://localhost:5000");
 
 const SudokuBoard = (props) => {
   const location = useLocation();
-  const locationBoard = { ...location.state.detail };
+  let history = useHistory();
+  // console.log(location.state.detail);
+  const [counter, setCounter] = React.useState(0);
   // let board = useSelector((state) => state.sudokuReducers);
-  console.log("location.state.detail is: ", location.state.detail);
+  // console.log("location.state.detail is: ", location.state.detail);
   // console.log("location.state.detail.solvedpuzzle is: ", location.state.detail.solvedPuzzle);
   // console.log("location.state.detail.puzzle is: ", location.state.detail.puzzle);
-  let [board, setBoard] = useState(locationBoard);
-  // let [playingBoard, setplayingBoard] = useState([...locationBoard.puzzle]);
-  let playingBoard = [...location.state.detail.puzzle];
+  //~ Deep copy of board object
+  let [board, setBoard] = useState(JSON.parse(JSON.stringify(location.state.detail.sudokuBoard)));
+  let [user, setUser] = useState(JSON.parse(JSON.stringify(location.state.detail.currentUser)));
+  // console.log("Current user is ", user);
+  //~ Deep copy of puzzle board
+  let [playingBoard, setplayingBoard] = useState(JSON.parse(JSON.stringify([...location.state.detail.sudokuBoard.puzzle])));
 
-  let [difficulty, setdifficulty] = useState(location.state.detail.difficulty);
-  let [finishedBoard, setfinishedBoard] = useState(location.state.detail.solvedPuzzle);
+  // let playingBoard = JSON.parse(JSON.stringify([...location.state.detail.puzzle]));
+
+  let [difficulty, setdifficulty] = useState(location.state.detail.sudokuBoard.difficulty);
+  let [finishedBoard, setfinishedBoard] = useState(location.state.detail.sudokuBoard.solvedPuzzle);
   let copyBoard;
-  // console.log("finishedBoard is:");
-  // console.log(finishedBoard);
 
+  //~ Alert the user when they try to reresh the page
   // useEffect(() => {
-  //   setplayingBoard(...board.puzzle);
+  //   window.addEventListener("beforeunload", alertUser);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", alertUser);
+  //   };
   // }, []);
+
+  // const alertUser = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = "";
+  // };
+
+  useEffect(() => {
+    setTimeout(() => setCounter(counter + 1), 1000);
+  }, [counter]);
 
   let checkFinish = () => {
     console.log("check finished");
-    //check if board is correct logic
-    if (JSON.stringify(board.puzzle) === JSON.stringify(board.solvedPuzzle)) {
+    console.log("Current user", user.name);
+    //~check if board is correct logic
+    if (JSON.stringify(playingBoard) === JSON.stringify(board.solvedPuzzle)) {
+      socket.emit("end_game", user.name, (error) => {
+        //! Check if error is being sent
+        if (error) return console.log("ERROR FINISHING GAME");
+      });
       return console.log("SOLVED YO");
+    } else {
+      return console.log("Not solved");
     }
-    return console.log("Not solved");
-
-    // socket.emit("end_game", (error) => {
-    //   if (error) return console.log("ERROR ENDING GAME");
-    // });
   };
 
-  let updateBoard = (enteredValue, key) => {
+  let updateBoard = (enteredValue, row, cell) => {
     // console.log("cell ", key);
     // console.log("entered value ", enteredValue.target.value);
     // console.log("playing board = ", playingBoard);
-    // console.log("cell", key, "which contained", playingBoard[0][key], " updated to ", enteredValue.target.value);
-    //? Updates board
+    // console.log("row", row, " cell", cell, "which contained", playingBoard[0][cell], " updated to ", enteredValue.target.value);
     copyBoard = [...playingBoard];
-    copyBoard[0][key] = parseInt(enteredValue.target.value);
-    // setplayingBoard([...copyBoard]);
+    console.log("copyboard is ", copyBoard);
+    copyBoard[0][cell] = parseInt(enteredValue.target.value);
+    setplayingBoard([...copyBoard]);
+
     // playingBoard = [...copyBoard];
     // console.log("playingBoard", playingBoard[0]);
-    console.log("board = ", board.puzzle[0]);
+    // console.log("board = ", board.puzzle[0]);
+    // console.log("playingBoard = ", playingBoard[row]);
   };
 
   return (
@@ -69,15 +91,23 @@ const SudokuBoard = (props) => {
           <table id="puzzle-grid">
             {board.puzzle.map((value, key, map) => {
               return (
-                <tbody>
+                <tbody key={"row" + key}>
+                  {/* {console.log("tbody value = ", value)} */}
+                  {/* {console.log("tbody key = ", "row" + key)} */}
                   <tr>
                     {board.puzzle[key].map((v, k, m) => {
                       return v !== 0 ? (
-                        <td>
+                        <td key={key.toString() + k.toString()}>
+                          {/* {console.log("td key = ", key.toString() + k.toString())} */}
+                          {/* {console.log("td value = ", v)}
+                          {console.log("td key = ", k)} */}
                           <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} />
                         </td>
                       ) : (
-                        <td>
+                        <td key={key.toString() + k.toString()}>
+                          {/* {console.log("td key = ", key.toString() + k.toString())} */}
+                          {/* {console.log("td value = ", v)}
+                          {console.log("td key = ", k)} */}
                           <input
                             className="00"
                             type="text"
@@ -85,7 +115,7 @@ const SudokuBoard = (props) => {
                             disabled={false}
                             defaultValue={""}
                             onInput={(e) => {
-                              updateBoard(e, k);
+                              updateBoard(e, key, k);
                             }}
                           />
                         </td>
@@ -105,7 +135,7 @@ const SudokuBoard = (props) => {
                 <span id="timer-label">Time</span>
               </div>
               <div id="timer" className="timer">
-                00:00
+                {counter}
               </div>
             </li>
 

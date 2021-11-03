@@ -32,6 +32,10 @@ export const getUser = (userId) => {
   return users.find((user) => user.userId === userId);
 };
 
+// export const getOtherUserInRoom = (userId) => {
+//   return users.find((user) => user.userId === userId);
+// };
+
 export const getUsersInRoom = (room) => {
   return users.filter((user) => user.room === room);
 };

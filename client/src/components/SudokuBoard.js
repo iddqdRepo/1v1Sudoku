@@ -107,6 +107,9 @@ const SudokuBoard = (props) => {
     let rowToHilight = [];
     let fullHighlight = [];
     let squareToHiglight = [];
+    let cellsToHilight = [];
+    let numberClicked = clickedCell.target.value;
+    console.log(numberClicked);
     //? UseRef????
     //for cell 40 i need cells:
     //rows = 00 10 20 30 40 50 60 70 80
@@ -114,6 +117,7 @@ const SudokuBoard = (props) => {
     //square = object
     console.log("clickedCell row cell =", row.toString() + cell.toString());
 
+    //^square loop
     totalSquares.map((k) => {
       if (k.includes(row.toString() + cell.toString())) {
         squareToHiglight = k;
@@ -134,12 +138,24 @@ const SudokuBoard = (props) => {
     for (let i = 0; i < 9; i++) {
       rowToHilight.push(row + i.toString());
     }
+
+    //^ Individual numbers to highlight
+    //! Bit inefficient at O N Squared, but only called when a number is selected, not an empty cell, and it's a small board
+    if (numberClicked) {
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          console.log(playingBoard[i][j]);
+          if (playingBoard[i][j].toString() === numberClicked) {
+            cellsToHilight.push(i.toString() + j.toString());
+          }
+        }
+      }
+    }
+    console.log("cells to highlight = ", cellsToHilight);
     // console.log("row needed to highlight are: ", rowToHilight);
-    fullHighlight = [...colsToHilight, ...rowToHilight, ...squareToHiglight];
+    fullHighlight = [...colsToHilight, ...rowToHilight, ...squareToHiglight, ...cellsToHilight];
     // console.log(highlighted);
     sethighlighted(fullHighlight);
-
-    //^square loop
     //&
     // for (let i = 0; i < 9; i++) {
     //   squareToHiglight.push(row + i.toString());
@@ -179,9 +195,28 @@ const SudokuBoard = (props) => {
                           {/* {console.log("td value = ", v)}
                           {console.log("td key = ", k)} */}
                           {highlighted.includes(key.toString() + k.toString()) ? (
-                            <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} id="highlight" />
+                            <input
+                              className="00"
+                              type="text"
+                              maxLength="1"
+                              readOnly
+                              defaultValue={v}
+                              id="highlight"
+                              onClick={(e) => {
+                                clickHighlight(e, key, k);
+                              }}
+                            />
                           ) : (
-                            <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} />
+                            <input
+                              className="00"
+                              type="text"
+                              maxLength="1"
+                              readOnly
+                              defaultValue={v}
+                              onClick={(e) => {
+                                clickHighlight(e, key, k);
+                              }}
+                            />
                           )}
 
                           {/* {console.log("td key = ", key.toString() + k.toString(), "VALUE: ", v)} */}

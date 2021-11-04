@@ -9,13 +9,12 @@ import * as api from "../api";
 
 function Homepage() {
   const [val, setVal] = useState("");
-  const [users, setUsers] = useState([]);
-  const [allUsersRoomsData, setAllUsersRoomsData] = useState([]);
+  const [roomsData, setRoomsData] = useState(useSelector((state) => state.allUserDataReducer));
+  // const [allUsersRoomsData, setAllUsersRoomsData] = useState([]);
   const [roomFull, setRoomFull] = useState(false);
   const [difficulty, setDifficulty] = useState("");
 
   let history = useHistory();
-  // const socket = io.connect("http://localhost:5000");
 
   const dispatch = useDispatch();
 
@@ -26,9 +25,9 @@ function Homepage() {
   }, [dispatch]);
 
   let roomId = useSelector((state) => state.roomCodeReducer);
-  let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
+  // let allUsersRoomsData = useSelector((state) => state.allUserDataReducer);
   console.log("room ID in roomId ", roomId);
-  console.log("allUsersTestCheck: ", allUsersTestCheck);
+  console.log("allUsersRoomsData: ", roomsData);
 
   // let joinRoom = (roomToJoin) => {
   //   console.log("Joining room, " + roomToJoin);
@@ -51,15 +50,11 @@ function Homepage() {
   //   // });
   // };
 
-  let startGame = (val) => {
-    history.push("/sudoku");
-  };
-
   let checkAllUser = () => {
     console.log("-----TESTING-----");
     // console.log("allUsersTestCheck: ", allUsersTestCheck);
-    console.log("allUsersRoomsData: ", allUsersRoomsData);
-    console.log("users: ", users);
+    console.log("allUsersRoomsData: ", roomsData);
+    // console.log("users: ", users);
   };
 
   const createGame = () => {
@@ -83,6 +78,8 @@ function Homepage() {
     console.log(event.target.value);
     console.log("difficulty is ", difficulty);
   };
+
+  //TODO - change joinRoom <link> to usehistory on the condition that room exists in redux store, otherwise room doesnt exist error
 
   return (
     <div className="HomepageContainer">

@@ -4,7 +4,25 @@ import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
+let totalSquares = [
+  ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 
+  ["03", "04", "05", "13", "14", "15", "23", "24", "25"],
+
+  ["06", "07", "08", "16", "17", "18", "26", "27", "28"],
+
+  ["30", "31", "32", "40", "41", "42", "50", "51", "52"],
+
+  ["33", "34", "35", "43", "44", "45", "53", "54", "55"],
+
+  ["36", "37", "38", "46", "47", "48", "56", "57", "58"],
+
+  ["60", "61", "62", "70", "71", "72", "80", "81", "82"],
+
+  ["63", "64", "65", "73", "74", "75", "83", "84", "85"],
+
+  ["66", "67", "68", "76", "77", "78", "86", "87", "88"],
+];
 //TODO - fix playingBoard - it needs to get the row and column to update from the return
 
 //TODO - If the finished button is pressed
@@ -33,6 +51,7 @@ const SudokuBoard = (props) => {
 
   let [difficulty, setdifficulty] = useState(location.state.detail.sudokuBoard.difficulty);
   let [finishedBoard, setfinishedBoard] = useState(location.state.detail.sudokuBoard.solvedPuzzle);
+  let [highlighted, sethighlighted] = useState([]);
   let copyBoard;
 
   //~ Alert the user when they try to reresh the page
@@ -48,9 +67,9 @@ const SudokuBoard = (props) => {
   //   e.returnValue = "";
   // };
 
-  useEffect(() => {
-    setTimeout(() => setCounter(counter + 1), 1000);
-  }, [counter]);
+  // useEffect(() => {
+  //   setTimeout(() => setCounter(counter + 1), 1000);
+  // }, [counter]);
 
   let checkFinish = () => {
     console.log("check finished");
@@ -83,14 +102,64 @@ const SudokuBoard = (props) => {
     // console.log("playingBoard = ", playingBoard[row]);
   };
 
-  let clickHighlight = (clickedCell) => {
+  let clickHighlight = (clickedCell, row, cell) => {
+    let colsToHilight = [];
+    let rowToHilight = [];
+    let fullHighlight = [];
+    let squareToHiglight = [];
+    //? UseRef????
+    //for cell 40 i need cells:
+    //rows = 00 10 20 30 40 50 60 70 80
+    //cols = 40 41 42 43 44 45 46 47 48
+    //square = object
+    console.log("clickedCell row cell =", row.toString() + cell.toString());
+
+    totalSquares.map((k) => {
+      if (k.includes(row.toString() + cell.toString())) {
+        squareToHiglight = k;
+        console.log("squareToHiglight =", squareToHiglight);
+        return;
+      }
+    });
+
+    //highlighted
+
+    //^columns loop
+    for (let i = 0; i < 9; i++) {
+      colsToHilight.push(i.toString() + cell);
+    }
+    // console.log("cols needed to highlight are: ", colsToHilight);
+
+    //^rows loop
+    for (let i = 0; i < 9; i++) {
+      rowToHilight.push(row + i.toString());
+    }
+    // console.log("row needed to highlight are: ", rowToHilight);
+    fullHighlight = [...colsToHilight, ...rowToHilight, ...squareToHiglight];
+    // console.log(highlighted);
+    sethighlighted(fullHighlight);
+
+    //^square loop
+    //&
+    // for (let i = 0; i < 9; i++) {
+    //   squareToHiglight.push(row + i.toString());
+    // }
+    // console.log("square needed to highlight are: ", squareToHiglight);
+
+    // console.log("rows needed to highlight are: ", )
+
+    // let cellw = (row.toString() + cell.toString()).toString();
+    // console.log("cellw ", cellw);
+    // sethighlighted([...highlighted, cellw]);
+    // console.log(highlighted);
+
     // clickedCell.target.parentElement.childElements  = { backgroundColor: "red" };
-    console.log(clickedCell.target.parentElement.parentElement.parentElement.parentElement);
-    console.log(clickedCell.target.parentElement.className);
+    // console.log(clickedCell.target.parentElement.parentElement.parentElement.parentElement);
+    // console.log(clickedCell.target.parentElement.className);
   };
 
   //TODO - add in highlighting row/col/chunk when cell is selected
-  //? maybe using template string id?
+  //? highlight input based on highlighted usestate
   return (
     <>
       <div className="body" id="sudoku">
@@ -109,7 +178,12 @@ const SudokuBoard = (props) => {
                           {/* {console.log("td key = ", key.toString() + k.toString())} */}
                           {/* {console.log("td value = ", v)}
                           {console.log("td key = ", k)} */}
-                          <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} />
+                          {highlighted.includes(key.toString() + k.toString()) ? (
+                            <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} id="highlight" />
+                          ) : (
+                            <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} />
+                          )}
+
                           {/* {console.log("td key = ", key.toString() + k.toString(), "VALUE: ", v)} */}
                         </td>
                       ) : (
@@ -118,20 +192,38 @@ const SudokuBoard = (props) => {
                           {/* {console.log("td key = ", key.toString() + k.toString())} */}
                           {/* {console.log("td value = ", v)}*/}
                           {/* {console.log("td key = ", key.toString() + k.toString())} */}
-                          <input
-                            // id="highlight"
-                            className="00"
-                            type="text"
-                            maxLength="1"
-                            disabled={false}
-                            defaultValue={""}
-                            onInput={(e) => {
-                              updateBoard(e, key, k);
-                            }}
-                            onClick={(e) => {
-                              clickHighlight(e);
-                            }}
-                          />
+
+                          {highlighted.includes(key.toString() + k.toString()) ? (
+                            <input
+                              id="highlight"
+                              className="00"
+                              type="text"
+                              maxLength="1"
+                              disabled={false}
+                              defaultValue={""}
+                              onInput={(e) => {
+                                updateBoard(e, key, k);
+                              }}
+                              onClick={(e) => {
+                                clickHighlight(e, key, k);
+                              }}
+                            />
+                          ) : (
+                            <input
+                              // id="highlight"
+                              className="00"
+                              type="text"
+                              maxLength="1"
+                              disabled={false}
+                              defaultValue={""}
+                              onInput={(e) => {
+                                updateBoard(e, key, k);
+                              }}
+                              onClick={(e) => {
+                                clickHighlight(e, key, k);
+                              }}
+                            />
+                          )}
                         </td>
                       );
                     })}

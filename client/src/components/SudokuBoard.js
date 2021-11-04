@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
-let endGame = false;
 
 //TODO - fix playingBoard - it needs to get the row and column to update from the return
 
@@ -84,10 +83,18 @@ const SudokuBoard = (props) => {
     // console.log("playingBoard = ", playingBoard[row]);
   };
 
+  let clickHighlight = (clickedCell) => {
+    // clickedCell.target.parentElement.childElements  = { backgroundColor: "red" };
+    console.log(clickedCell.target.parentElement.parentElement.parentElement.parentElement);
+    console.log(clickedCell.target.parentElement.className);
+  };
+
+  //TODO - add in highlighting row/col/chunk when cell is selected
+  //? maybe using template string id?
   return (
     <>
       <div className="body" id="sudoku">
-        <div className="card game">
+        <div className="card game" id="hello">
           <table id="puzzle-grid">
             {board.puzzle.map((value, key, map) => {
               return (
@@ -97,18 +104,22 @@ const SudokuBoard = (props) => {
                   <tr>
                     {board.puzzle[key].map((v, k, m) => {
                       return v !== 0 ? (
-                        <td key={key.toString() + k.toString()}>
+                        // <td className={`${"td"} ${key.toString() + k.toString()} `} key={key.toString() + k.toString()}>
+                        <td className={"td" + key.toString() + k.toString()} key={key.toString() + k.toString()}>
                           {/* {console.log("td key = ", key.toString() + k.toString())} */}
                           {/* {console.log("td value = ", v)}
                           {console.log("td key = ", k)} */}
                           <input className="00" type="text" maxLength="1" disabled={true} defaultValue={v} />
+                          {/* {console.log("td key = ", key.toString() + k.toString(), "VALUE: ", v)} */}
                         </td>
                       ) : (
-                        <td key={key.toString() + k.toString()}>
+                        // <td className={`${"td"} ${key.toString() + k.toString()}`} key={key.toString() + k.toString()}>
+                        <td className={"td" + key.toString() + k.toString()} key={key.toString() + k.toString()}>
                           {/* {console.log("td key = ", key.toString() + k.toString())} */}
-                          {/* {console.log("td value = ", v)}
-                          {console.log("td key = ", k)} */}
+                          {/* {console.log("td value = ", v)}*/}
+                          {/* {console.log("td key = ", key.toString() + k.toString())} */}
                           <input
+                            // id="highlight"
                             className="00"
                             type="text"
                             maxLength="1"
@@ -116,6 +127,9 @@ const SudokuBoard = (props) => {
                             defaultValue={""}
                             onInput={(e) => {
                               updateBoard(e, key, k);
+                            }}
+                            onClick={(e) => {
+                              clickHighlight(e);
                             }}
                           />
                         </td>

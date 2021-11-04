@@ -262,7 +262,6 @@ td:nth-child(3n + 1) {
   float: left;
   padding: 32px 32px 16px 32px;
 }
-
 .status {
   margin-left: 32px;
   padding-top: 10px;
@@ -315,4 +314,8 @@ td:nth-child(3n + 1) {
 
 #finished-check {
   font-size: 15px;
+}
+
+#highlight {
+  background-color: #3dce9259;
 }

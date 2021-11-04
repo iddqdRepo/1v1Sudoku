@@ -7,6 +7,7 @@ import { useHistory, Link, useLocation } from "react-router-dom";
 
 const socket = io.connect("http://localhost:5000");
 let movedToGame = false;
+//! Should this be useref?
 let currentUser = {};
 
 //! Joingame renders 1 time, then 2 times, then 3 times, then 4 times and so on

@@ -105,6 +105,33 @@ io.on("connection", (socket) => {
     // }
   });
 
+  socket.on("check_room", (payload) => {
+    //emit to users in room
+    console.log("in check_room ", getDataInUserList());
+    let data = getDataInUserList();
+    let rooms = [];
+
+    data.map((v) => {
+      rooms.push(v.room);
+    });
+
+    socket.emit("roomvalidationdata", rooms);
+
+    // console.log("socket id is: ", socket.id);
+    // console.log("payload user is: ", payload);
+    // const user = getUser(payload);
+    // const room =
+    // console.log("user is: ", user);
+    // console.log("userROOM is: ", user.room);
+    // io.to(user.room).emit("endgameemit", user.userId);
+
+    // if (user) {
+    //   console.log("user true, user is: ", user);
+    //   console.log("user.room true, user.room is: ", user.room);
+    //   io.in(user.room).emit("endgameemit", { winner: user.username });
+    // }
+  });
+
   //Welcome connected user
   socket.emit("message", "Welcome to Sudoku!");
 

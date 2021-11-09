@@ -1,63 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory, Link } from "react-router-dom";
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../api";
+const socket = io.connect("http://localhost:5000");
 
 //TODO Get the useState spread working for usersRooms, so I can test adding and removing rooms + manually check if they are full etc.
 
 function Homepage() {
   const [val, setVal] = useState("");
-  const [roomsData, setRoomsData] = useState(useSelector((state) => state.allUserDataReducer));
-  // const [allUsersRoomsData, setAllUsersRoomsData] = useState([]);
   const [roomFull, setRoomFull] = useState(false);
   const [difficulty, setDifficulty] = useState("");
+  const [errorText, seterrorText] = useState("");
 
   let history = useHistory();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // getAllUsers();
     console.log("dispatching homepage getRoom");
     dispatch(getRoom()); //dispatching the action from ./actions/posts - redux
+    // dispatch(getAllUsers());
   }, [dispatch]);
 
   let roomId = useSelector((state) => state.roomCodeReducer);
-  // let allUsersRoomsData = useSelector((state) => state.allUserDataReducer);
-  console.log("room ID in roomId ", roomId);
-  console.log("allUsersRoomsData: ", roomsData);
-
-  // let joinRoom = (roomToJoin) => {
-  //   console.log("Joining room, " + roomToJoin);
-
-  //   socket.emit("join_room", { room: roomToJoin }, (error) => {
-  //     console.log("emit joinroom name," + roomToJoin);
-  //     if (error) setRoomFull(true);
-  //     console.log("ERROR CREATING ROOM");
-  //   });
-
-  //   // //? This gives me access to the data of the users that are in the current room
-  //   // socket.on("roomData", ({ users }) => {
-  //   //   setUsers(users);
-  //   //   console.log("JoinRoom setUsersRooms is ", users);
-  //   // });
-
-  //   // socket.on("allUserData", (data) => {
-  //   //   setAllUsersRoomsData(data);
-  //   //   console.log("JoinRoom AllUsersRoomsData is ", allUsersRoomsData);
-  //   // });
-  // };
-
-  let checkAllUser = () => {
-    console.log("-----TESTING-----");
-    // console.log("allUsersTestCheck: ", allUsersTestCheck);
-    console.log("allUsersRoomsData: ", roomsData);
-    // console.log("users: ", users);
-  };
 
   const createGame = () => {
+    socket.emit("check_room", (error) => {
+      if (error) console.log("ERROR CHECK_ROOM");
+    });
+
     console.log("difficulty selected = ", difficulty);
 
     if (!difficulty) {
@@ -79,7 +51,43 @@ function Homepage() {
     console.log("difficulty is ", difficulty);
   };
 
-  //TODO - change joinRoom <link> to usehistory on the condition that room exists in redux store, otherwise room doesnt exist error
+  function asyncEmit() {
+    console.log("In asyncEmit");
+    return new Promise(function (resolve, reject) {
+      socket.emit("check_room", () => {});
+      socket.on("roomvalidationdata", (roomvalidationdata) => {
+        resolve(roomvalidationdata);
+      });
+      setTimeout(reject, 1000);
+    });
+  }
+
+  const joinGame = async () => {
+    const result = await asyncEmit();
+
+    const occurences = result.reduce(function (acc, curr) {
+      return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
+    }, {});
+    console.log("roomsCreated ", result);
+    console.log("occurences ", occurences);
+    console.log("occurences val ", occurences[val]);
+
+    if (occurences[val] > 1) {
+      seterrorText("Room Full");
+      return console.log("ROOM FULL");
+    }
+
+    if (result.includes(val)) {
+      console.log("RoomsCreated Data ", result);
+      history.push({
+        pathname: `/join`,
+        search: `?roomCode=${val}`,
+      });
+    } else {
+      console.log(val, "DOES NOT EXIST");
+      return seterrorText(val + " does not exist");
+    }
+  };
 
   return (
     <div className="HomepageContainer">
@@ -101,9 +109,10 @@ function Homepage() {
       </div>
 
       <div className="JoinGameContainer">
-        <Link to={`/join?roomCode=${val}`}>
-          <button className="JoinCreateBtn">Join Game</button>
-        </Link>
+        <button className="JoinCreateBtn" onClick={() => joinGame()}>
+          Join Game
+        </button>
+
         <input
           className="JoinGameInput"
           placeholder="Enter game code"
@@ -112,9 +121,10 @@ function Homepage() {
             setVal(e.target.value);
           }}
         ></input>
-        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
+        {/* <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
           Check all user list
-        </button>
+        </button> */}
+        {errorText}
       </div>
     </div>
   );

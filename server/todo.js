@@ -46,6 +46,7 @@
 !BUGS
     // Host creates game, hits back button to go back to home screen > on create a new game again, just infinite loading - when room is joined only 1 person in it
         socket.disconnect caused this
+    !if you click joinRoom and get an error joining room, click join button again it joins the room even though it is full
     !Create game screen page refresh crashes app
     !If players are in sudoku game on server restart Error: listen EADDRINUSE: address already in use :::5000
         ?Because players are in the suoku game and it's looking for the players/rooms, but server restarted so they no longer exist?

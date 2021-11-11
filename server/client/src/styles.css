@@ -299,6 +299,13 @@ td:nth-child(3n + 1) {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14);
   text-align: center;
 }
+.prompt-text {
+  color: #1565c0;
+  font-size: 17px;
+  padding: 4px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14);
+  text-align: center;
+}
 
 .card-group {
   overflow: hidden;

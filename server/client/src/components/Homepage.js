@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import * as api from "../api";
 const socket = io.connect("http://localhost:5000");
 
-//TODO Get the useState spread working for usersRooms, so I can test adding and removing rooms + manually check if they are full etc.
-
 function Homepage() {
   const [val, setVal] = useState("");
   const [roomFull, setRoomFull] = useState(false);

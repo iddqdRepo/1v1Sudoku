@@ -7,14 +7,13 @@ import { useHistory, Link, useLocation } from "react-router-dom";
 
 const socket = io.connect("http://localhost:5000");
 let movedToGame = false;
-//! Should this be useref?
 let currentUser = {};
 
 //! Joingame renders 1 time, then 2 times, then 3 times, then 4 times and so on
 //! See Below
 
 function JoinGame(props) {
-  const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]);
+  const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]); //! Unmounted component
   // const [currentUser, setCurrentUser] = useState({});
   const roomCodeData = queryString.parse(props.location.search).roomCode;
   let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
@@ -24,18 +23,16 @@ function JoinGame(props) {
 
   useEffect(() => {
     dispatch(getAllUsers());
-    // console.log("----- USE EFFECT CALL ----------");
-    // console.log("URL = ", );
   }, [dispatch]);
 
   useEffect(() => {
-    // console.log("Joining room, " + roomId + " adding room to list ");
     socket.emit("join_room", { room: roomId }, (error) => {
       console.log("EMIT JOIN_ROOM," + roomId);
       if (error) console.log("ERROR JOINING ROOM");
     });
     dispatch(getAllUsers());
     return function cleanup() {
+      console.log("DOES REFRESHING TRIGGER THIS - JOINGAME");
       // socket.disconnect(); --- this causes the can't create room again error
       // console.log("MOVED TO GAME IS ", movedToGame);
       if (!movedToGame) {
@@ -46,10 +43,19 @@ function JoinGame(props) {
     };
   }, []);
 
+  const alertUser = (e) => {
+    console.log("joinGame alertUser");
+    e.preventDefault();
+    e.returnValue = "";
+  };
   useEffect(() => {
-    //! Every time I leave and join any game, this gets rendered 1 more time (4th time I do it, it renders 4 times over and over etc)
-    //! Probably due to the useState in the homepage and typing stuff in?
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, []);
 
+  useEffect(() => {
     console.log("----- JOINGAME USE EFFECT CALL ----------");
     //? When the room is created on the server, it emits the data (from server to client instead of client to server) with "io.to(newUser.room).emit("roomData")"
     //? This socket.on grabs that emitted roomData and stores it in the useState variable here
@@ -75,18 +81,29 @@ function JoinGame(props) {
     });
 
     socket.on("endgameemit", (payload) => {
-      console.log("socket.on(end_game_emit - SudokuBoard");
-      console.log(payload, " has won");
-      console.log("currentUser is: ", currentUser);
-      if (payload.winner === currentUser.name) {
+      // console.log("socket.on(end_game_emit - SudokuBoard");
+      // console.log(payload, " has won");
+      // console.log("currentUser is: ", currentUser);
+      // console.log("winner is ", payload, " winner is ", currentUser.name);
+      if (payload === currentUser.name) {
+        console.log("Disconnect?");
+        socket.disconnect();
         history.push({
-          pathname: `/hey`,
-          search: `Winner`,
+          pathname: `/result`,
+          search: `?Winner`,
+          state: {
+            detail: { winner: true },
+          },
         });
       } else {
+        console.log("Disconnect?");
+        socket.disconnect();
         history.push({
-          pathname: `/hey`,
-          search: `Loser`,
+          pathname: `/result`,
+          search: `?Loser`,
+          state: {
+            detail: { winner: false },
+          },
         });
       }
       // if (error) return console.log("ERROR FINISHING GAME");
@@ -126,8 +143,51 @@ function JoinGame(props) {
     console.log(roomAndUsersInRoom.room, "has ", roomVal, "users in it");
   };
 
-  // let roomId = "creategame";
+  console.log("roomAndUsersInRoom.users === undefined ", roomAndUsersInRoom.users === undefined);
+  console.log("roomAndUsersInRoom.users  ", roomAndUsersInRoom.users);
 
+  return roomAndUsersInRoom.users === undefined ? (
+    <>
+      <div className="Loading-ring">
+        {/* {(console.log("sudoku board is"), sudokuBoardFromReducers)} */}
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </>
+  ) : roomAndUsersInRoom.users.length === 2 ? (
+    <div>
+      <div className="CreateGamePageContainer">
+        <div className="CodeText">Joined Room:</div>
+        <div className="Code">{roomCodeData}</div>
+        <div className="Loading-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
+          Check users in room
+        </button>
+        <div className="Waiting">Waiting for Player 1 to start the game</div>
+      </div>
+    </div>
+  ) : (
+    <div className="CreateGamePageContainer">
+      <div className="CodeText">Other Player Left</div>
+      <Link to="/">
+        <button
+          className="JoinCreateBtn"
+          onClick={() => {
+            socket.off();
+          }}
+        >
+          Home
+        </button>
+      </Link>
+    </div>
+  );
   return (
     <div>
       <div className="CreateGamePageContainer">

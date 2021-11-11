@@ -7,7 +7,6 @@ const socket = io.connect("http://localhost:5000");
 let movedToGame = false;
 let currentUser = {};
 
-//! IT WOORRRRRRRRRRRKS - But it doesnt update the store, is that an issue?
 //TODO MAIN - Sudoku board passed as props to usehistory, get it to emit to other player in room and start with same board
 //TODO  - Figure out why certain things trigger so many useEffect functions, Is this a bad thing?
 
@@ -50,12 +49,27 @@ function CreateGame() {
     //TODO - Remove from the list when user disconnects from creategame
     return function cleanup() {
       // socket.disconnect(); --- this causes the can't create room again error
-      console.log("MOVED TO GAME IS ", movedToGame);
+      // console.log("MOVED TO GAME IS ", movedToGame);
+      console.log("DOES REFRESHING TRIGGER THIS - CREATEGAME");
+
       if (!movedToGame) {
         console.log("CLEANUP INITIATED");
         //shut down connnection instance
         socket.off();
       }
+    };
+  }, []);
+
+  const alertUser = (e) => {
+    console.log("createGame alertUser");
+    e.preventDefault();
+    e.returnValue = "";
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
     };
   }, []);
 
@@ -87,18 +101,28 @@ function CreateGame() {
 
   useEffect(() => {
     socket.on("endgameemit", (payload) => {
-      console.log("socket.on(end_game_emit - SudokuBoard");
-      console.log(payload, " has won");
-      console.log("currentUser is: ", currentUser.name);
+      // console.log("socket.on(end_game_emit - SudokuBoard");
+      // console.log(payload, " has won");
+      // console.log("currentUser is: ", currentUser.name);
       if (payload === currentUser.name) {
+        console.log("Disconnect?");
+        socket.disconnect();
         history.push({
-          pathname: `/hey`,
-          search: `Winner`,
+          pathname: `/result`,
+          search: `?Winner`,
+          state: {
+            detail: { winner: true },
+          },
         });
       } else {
+        console.log("Disconnect?");
+        socket.disconnect();
         history.push({
-          pathname: `/hey`,
-          search: `Loser`,
+          pathname: `/result`,
+          search: `?Loser`,
+          state: {
+            detail: { winner: false },
+          },
         });
       }
       // if (error) return console.log("ERROR FINISHING GAME");

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../styles.css";
-import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 const socket = io.connect("http://localhost:5000");
-let totalSquares = [
+let sudokuBoxOnClickHighlighting = [
   ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 
   ["03", "04", "05", "13", "14", "15", "23", "24", "25"],
@@ -36,6 +35,7 @@ const SudokuBoard = (props) => {
   let history = useHistory();
   // console.log(location.state.detail);
   const [counter, setCounter] = React.useState(0);
+  const [messageAlerts, setmessageAlerts] = React.useState("GO!");
   // let board = useSelector((state) => state.sudokuReducers);
   // console.log("location.state.detail is: ", location.state.detail);
   // console.log("location.state.detail.solvedpuzzle is: ", location.state.detail.solvedPuzzle);
@@ -58,14 +58,20 @@ const SudokuBoard = (props) => {
   // useEffect(() => {
   //   window.addEventListener("beforeunload", alertUser);
   //   return () => {
+  //     console.log("in here");
   //     window.removeEventListener("beforeunload", alertUser);
   //   };
   // }, []);
 
-  // const alertUser = (e) => {
-  //   e.preventDefault();
-  //   e.returnValue = "";
-  // };
+  window.onbeforeunload = (event) => {
+    const e = event || window.event;
+    // Cancel the event
+    e.preventDefault();
+    if (e) {
+      e.returnValue = ""; // Legacy method for cross browser support
+    }
+    return ""; // Legacy method for cross browser support
+  };
 
   // useEffect(() => {
   //   setTimeout(() => setCounter(counter + 1), 1000);
@@ -82,7 +88,7 @@ const SudokuBoard = (props) => {
       });
       return console.log("SOLVED YO");
     } else {
-      return console.log("Not solved");
+      setmessageAlerts("Board not finished");
     }
   };
 
@@ -118,7 +124,7 @@ const SudokuBoard = (props) => {
     console.log("clickedCell row cell =", row.toString() + cell.toString());
 
     //^square loop
-    totalSquares.map((k) => {
+    sudokuBoxOnClickHighlighting.map((k) => {
       if (k.includes(row.toString() + cell.toString())) {
         squareToHiglight = k;
         console.log("squareToHiglight =", squareToHiglight);
@@ -174,8 +180,6 @@ const SudokuBoard = (props) => {
     // console.log(clickedCell.target.parentElement.className);
   };
 
-  //TODO - add in highlighting row/col/chunk when cell is selected
-  //? highlight input based on highlighted usestate
   return (
     <>
       <div className="body" id="sudoku">
@@ -184,16 +188,10 @@ const SudokuBoard = (props) => {
             {board.puzzle.map((value, key, map) => {
               return (
                 <tbody key={"row" + key}>
-                  {/* {console.log("tbody value = ", value)} */}
-                  {/* {console.log("tbody key = ", "row" + key)} */}
                   <tr>
                     {board.puzzle[key].map((v, k, m) => {
                       return v !== 0 ? (
-                        // <td className={`${"td"} ${key.toString() + k.toString()} `} key={key.toString() + k.toString()}>
                         <td className={"td" + key.toString() + k.toString()} key={key.toString() + k.toString()}>
-                          {/* {console.log("td key = ", key.toString() + k.toString())} */}
-                          {/* {console.log("td value = ", v)}
-                          {console.log("td key = ", k)} */}
                           {highlighted.includes(key.toString() + k.toString()) ? (
                             <input
                               className="00"
@@ -273,10 +271,10 @@ const SudokuBoard = (props) => {
             <li>
               <div className="vertical-adjust">
                 <i className="far fa-clock"></i>
-                <span id="timer-label">Time</span>
+                <span id="timer-label">Alerts</span>
               </div>
-              <div id="timer" className="timer">
-                {counter}
+              <div id="timer" className="prompt-text">
+                {messageAlerts}
               </div>
             </li>
 

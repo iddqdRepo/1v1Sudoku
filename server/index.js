@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { addUser, removeUser, getUser, getUsersInRoom, getDataInUserList } from "./users.js";
+import path from "path";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ console.log();
 const app = express();
 
 const server = createServer(app); //for server to handle socket.io
-
+const __dirname = path.resolve();
 app.use(express.json({ limit: "30mb", extended: true })); //every requrest that comes in will go through this middleware and be converted to JSON
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
@@ -34,9 +35,14 @@ const io = new Server(server, {
 });
 app.use("/sudoku", sudokuRoutes);
 
-io.on("connection", (socket) => {
-  // console.log("New WS connection with id" + socket.id);
+//client middleware for Heroku
+app.use(express.static(path.join(__dirname, "/client")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+});
+
+io.on("connection", (socket) => {
   socket.on("join_room", (payload, callback) => {
     //payload is info, callback is error
     console.log("-------------------------------------Joined Room");
@@ -48,19 +54,12 @@ io.on("connection", (socket) => {
       room: payload.room,
     });
 
-    // socket.on("testCall", (payload, callback) =>{
-    //   io.to(payload.room).emit("roomData", { room: newUser.room, users: getUsersInRoom(newUser.room) });
-
-    // })
-
     //If there are more than two people in a room, return an error
     if (error) return callback(error);
     console.log("error is: ", error);
 
     socket.join(newUser.room);
     console.log("num users in room ", newUser.room, "is ", getUsersInRoom(newUser.room).length);
-
-    // console.log("user list data: ", getDataInUserList());
 
     //TODO only emit roomData if there is a newUser returned, otherwise error is returned and it crashes
     console.log("Emitting to NewUser.room: ", newUser.room, "room data: ", { room: newUser.room, users: getUsersInRoom(newUser.room) });
@@ -97,12 +96,6 @@ io.on("connection", (socket) => {
     console.log("user is: ", user);
     console.log("userROOM is: ", user.room);
     io.to(user.room).emit("endgameemit", user.userId);
-
-    // if (user) {
-    //   console.log("user true, user is: ", user);
-    //   console.log("user.room true, user.room is: ", user.room);
-    //   io.in(user.room).emit("endgameemit", { winner: user.username });
-    // }
   });
 
   socket.on("check_room", (payload) => {
@@ -116,27 +109,10 @@ io.on("connection", (socket) => {
     });
 
     socket.emit("roomvalidationdata", rooms);
-
-    // console.log("socket id is: ", socket.id);
-    // console.log("payload user is: ", payload);
-    // const user = getUser(payload);
-    // const room =
-    // console.log("user is: ", user);
-    // console.log("userROOM is: ", user.room);
-    // io.to(user.room).emit("endgameemit", user.userId);
-
-    // if (user) {
-    //   console.log("user true, user is: ", user);
-    //   console.log("user.room true, user.room is: ", user.room);
-    //   io.in(user.room).emit("endgameemit", { winner: user.username });
-    // }
   });
 
   //Welcome connected user
   socket.emit("message", "Welcome to Sudoku!");
-
-  //Broadcast when a player connects
-  // socket.broadcast.emit("message", "A user had joined the game");
 
   //tell other person has disconnected
   socket.on("disconnect", () => {

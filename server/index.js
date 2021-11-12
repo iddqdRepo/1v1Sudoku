@@ -35,13 +35,6 @@ const io = new Server(server, {
 });
 app.use("/sudoku", sudokuRoutes);
 
-//client middleware for Heroku
-app.use(express.static(path.join(__dirname, "/client")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
-});
-
 io.on("connection", (socket) => {
   socket.on("join_room", (payload, callback) => {
     //payload is info, callback is error
@@ -123,6 +116,16 @@ io.on("connection", (socket) => {
     io.emit("message", `${socket.id} has left the game`);
   });
 });
+
+//client middleware for Heroku
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    // res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 5000;

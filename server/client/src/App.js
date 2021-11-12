@@ -9,7 +9,7 @@ import CreateGame from "./components/CreateGame";
 import JoinGame from "./components/JoinGame";
 import Result from "./components/Result";
 
-const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("http://localhost:5000");
 
 // socket.on("message", (message) => {
 //   console.log(message);

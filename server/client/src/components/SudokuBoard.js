@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles.css";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let sudokuBoxOnClickHighlighting = [
   ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 

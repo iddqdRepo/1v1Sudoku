@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
 

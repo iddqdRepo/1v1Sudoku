@@ -4,8 +4,8 @@ import { io } from "socket.io-client";
 import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../api";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 
 function Homepage() {
   const [val, setVal] = useState("");

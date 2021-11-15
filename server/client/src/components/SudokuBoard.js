@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles.css";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let sudokuBoxOnClickHighlighting = [
   ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 
@@ -94,13 +94,15 @@ const SudokuBoard = (props) => {
   };
 
   let updateBoard = (enteredValue, row, cell) => {
-    // console.log("cell ", key);
-    // console.log("entered value ", enteredValue.target.value);
-    // console.log("playing board = ", playingBoard);
-    // console.log("row", row, " cell", cell, "which contained", playingBoard[0][cell], " updated to ", enteredValue.target.value);
+    //! ERROR IN HERE, COPYBOARD ISN'T UPDATING AFTER A FEW VALUES ARE ADDED, IT JUST STOPS
+    console.log("cell ", cell);
+    console.log("entered value ", enteredValue.target.value);
+    console.log("playing board = ", playingBoard);
+    console.log("row", row, " cell", cell, "which contained", playingBoard[0][cell], " updated to ", enteredValue.target.value);
+
     copyBoard = [...playingBoard];
     console.log("copyboard is ", copyBoard);
-    copyBoard[0][cell] = parseInt(enteredValue.target.value);
+    copyBoard[row][cell] = parseInt(enteredValue.target.value);
     setplayingBoard([...copyBoard]);
 
     // playingBoard = [...copyBoard];
@@ -128,7 +130,7 @@ const SudokuBoard = (props) => {
     sudokuBoxOnClickHighlighting.map((k) => {
       if (k.includes(row.toString() + cell.toString())) {
         squareToHiglight = k;
-        console.log("squareToHiglight =", squareToHiglight);
+        // console.log("squareToHiglight =", squareToHiglight);
         return;
       }
     });
@@ -163,22 +165,6 @@ const SudokuBoard = (props) => {
     fullHighlight = [...colsToHilight, ...rowToHilight, ...squareToHiglight, ...cellsToHilight];
     // console.log(highlighted);
     sethighlighted(fullHighlight);
-    //&
-    // for (let i = 0; i < 9; i++) {
-    //   squareToHiglight.push(row + i.toString());
-    // }
-    // console.log("square needed to highlight are: ", squareToHiglight);
-
-    // console.log("rows needed to highlight are: ", )
-
-    // let cellw = (row.toString() + cell.toString()).toString();
-    // console.log("cellw ", cellw);
-    // sethighlighted([...highlighted, cellw]);
-    // console.log(highlighted);
-
-    // clickedCell.target.parentElement.childElements  = { backgroundColor: "red" };
-    // console.log(clickedCell.target.parentElement.parentElement.parentElement.parentElement);
-    // console.log(clickedCell.target.parentElement.className);
   };
 
   return (

@@ -12,7 +12,7 @@ body {
 }
 
 /* !Homepage styles */
-
+/* 
 .HomepageContainer {
   display: flex;
   height: 100vh;
@@ -25,7 +25,6 @@ body {
 .JoinGameContainer {
   display: flex;
   height: 200px;
-  /*   border: 1px solid blue; */
   justify-content: center;
   align-items: center;
   margin: 100px;
@@ -34,7 +33,6 @@ body {
 .CreateGameContainer {
   display: flex;
   height: 200px;
-  /*   border: 1px solid blue; */
   justify-content: center;
   align-items: center;
   margin: 100px;
@@ -109,6 +107,155 @@ body {
     padding: 0.75rem 3rem;
     font-size: 1.25rem;
   }
+} */
+
+.Home {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  /* background-color: #f5f5f5; */
+}
+.Homepage-text-container {
+  padding-top: 50px;
+  display: flex;
+  height: 50vh;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 30px;
+  text-align: center;
+}
+.HomepageContainer {
+  display: flex;
+  height: 30vh;
+  justify-content: center;
+  align-items: flex-end;
+}
+.error-text {
+  display: flex;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+}
+.button-div {
+  fisplay: flex;
+  padding: 16px;
+  width: 320px;
+  margin: 0 auto;
+}
+button,
+.radio-input {
+  border: 0;
+  outline: 0;
+  font-size: 16px;
+  border-radius: 320px;
+  padding: 16px;
+  background-color: #ebecf0;
+  text-shadow: 1px 1px 0 #fff;
+}
+.choose-difficulty-text {
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+button {
+  color: #61677c;
+  font-weight: bold;
+  box-shadow: -5px -5px 20px #fff, 5px 5px 20px #babecc;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  font-weight: 600;
+}
+button:hover {
+  box-shadow: -2px -2px 5px #fff, 2px 2px 5px #babecc;
+}
+button:active {
+  box-shadow: inset 1px 1px 2px #babecc, inset -1px -1px 2px #fff;
+}
+button .icon {
+  margin-right: 8px;
+}
+button.unit {
+  border-radius: 8px;
+  line-height: 0;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 8px;
+  font-size: 19.2px;
+}
+button.unit .icon {
+  margin-right: 0;
+}
+button.main {
+  /* display: block; */
+  width: 100%;
+  color: black;
+}
+
+.radio-input {
+  margin-right: 8px;
+  box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #fff;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.radio-input:focus {
+  box-shadow: inset 1px 1px 2px #babecc, inset -1px -1px 2px #fff;
+}
+
+/* !radio */
+.switch-field {
+  display: flex;
+  margin-bottom: 10px;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.switch-field input {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  width: 1px;
+  border: 0;
+  overflow: hidden;
+}
+
+.switch-field label {
+  background-color: #e4e4e4;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  padding: 8px 16px;
+  margin-right: -1px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.1s ease-in-out;
+}
+
+.switch-field label:hover {
+  cursor: pointer;
+}
+
+.switch-field input:checked + label {
+  background-color: #a5dc86;
+  box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+
+.switch-field label:last-of-type {
+  border-radius: 0 4px 4px 0;
 }
 
 /* !Create Game Styles */
@@ -121,20 +268,29 @@ body {
   /* border: 1px solid red; */
   justify-content: flex-start;
   align-items: center;
-  background-color: beige;
+  /* background-color: #f5f5f5; */
 }
 
 .CodeText {
   font-size: 60px;
-  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+  font-family: "Roboto", sans-serif;
 }
 
 .Code {
   font-size: 40px;
-  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+  font-family: "Roboto", sans-serif;
   margin-bottom: 50px;
+}
+
+.Waiting {
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+}
+
+.Waiting-description {
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  margin-top: 15px;
 }
 
 .Loading-ring {
@@ -150,10 +306,10 @@ body {
   width: 64px;
   height: 64px;
   margin: 8px;
-  border: 8px solid blue;
+  border: 8px solid rgb(7, 7, 26);
   border-radius: 50%;
   animation: Loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: blue transparent transparent transparent;
+  border-color: rgb(7, 7, 26) transparent transparent transparent;
 }
 .Loading-ring div:nth-child(1) {
   animation-delay: -0.45s;
@@ -233,6 +389,14 @@ td:nth-child(3n) {
 td:nth-child(3n + 1) {
   border-left: 4px solid #000000;
 }
+::placeholder {
+  font-size: 11px;
+  color: blue;
+}
+.noting {
+  color: darkblue;
+  font-size: 11px;
+}
 
 .FinishCheckContainer {
   display: flex;
@@ -274,6 +438,7 @@ td:nth-child(3n + 1) {
     justify-content: center;
     flex-flow: column;*/
   margin: 0 0 0 22px;
+  width: 170px;
   height: 100%;
 }
 
@@ -324,5 +489,57 @@ td:nth-child(3n + 1) {
 }
 
 #highlight {
-  background-color: #387dd844;
+  background-color: #d9dbe2;
+}
+
+/*! Sudoku noting button */
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: #333;
+  margin: 20px auto;
+  position: relative;
+  border-radius: 50px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.slideThree:before {
+  content: "ON";
+  color: #27ae60;
+  position: absolute;
+  left: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+}
+.slideThree:after {
+  content: "OFF";
+  color: #ffffff;
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+  /* text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15); */
+}
+
+.slideThree label {
+  display: block;
+  width: 34px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fcfff4;
+  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.slideThree input[type="checkbox"] {
+  visibility: hidden;
+}
+.slideThree input[type="checkbox"]:checked + label {
+  left: 43px;
 }

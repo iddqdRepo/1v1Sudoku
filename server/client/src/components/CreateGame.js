@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
+import "../styles.css";
 const socket = io.connect("http://localhost:5000");
 // const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
@@ -178,22 +179,20 @@ function CreateGame() {
       </div>
     </>
   ) : roomAndUsersInRoom.users.length < 2 ? (
-    <div>
-      {console.log(roomAndUsersInRoom)}
-      <div className="CreateGamePageContainer">
-        <div className="CodeText">Your Code is:</div>
-        <div className="Code">{roomId}</div>
-        <div className="Loading-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
-          Check users in room
-        </button>
-        <div className="Waiting">Waiting for other player to join</div>
+    <div className="CreateGamePageContainer">
+      <div className="CodeText">Your Code is:</div>
+      <div className="Code">{roomId}</div>
+      <div className="Loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
+      {/* <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
+        Check users in room
+      </button> */}
+      <div className="Waiting">Waiting for other player to join</div>
+      <div className="Waiting-description">Tell your opponent to enter the code above press 'Join Game'</div>
     </div>
   ) : (
     <div>
@@ -204,6 +203,8 @@ function CreateGame() {
         <button className="JoinCreateBtn" onClick={() => startGame()}>
           Start Game
         </button>
+
+        <div className="Waiting-description">Press "Start Game" when you are ready</div>
       </div>
     </div>
   );

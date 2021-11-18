@@ -89,44 +89,89 @@ function Homepage() {
   };
 
   return (
-    <div className="HomepageContainer">
-      <div className="CreateGameContainer">
-        <button className="JoinCreateBtn" onClick={() => createGame()}>
-          Create Game
-        </button>
-      </div>
-      <div onChange={chooseDifficulty}>
-        <div>
-          <input type="radio" value="easy" name="gender" /> Easy
-        </div>
-        <div>
-          <input type="radio" value="medium" name="gender" /> Med
-        </div>
-        <div>
-          <input type="radio" value="test" name="gender" /> test
-        </div>
+    <div className="Home">
+      <div className="Homepage-text-container">
+        Welcome to 1v1 Sudoku.
+        <br />
+        <br />
+        Go head to head with a friend to see who is better.
+        <br />
+        <br />
+        Each player gets served the exact same board. <br />
+        <br />
+        Good Luck.
       </div>
 
-      <div className="JoinGameContainer">
-        <button className="JoinCreateBtn" onClick={() => joinGame()}>
-          Join Game
-        </button>
-
-        <input
-          className="JoinGameInput"
-          placeholder="Enter game code"
-          value={val}
-          onInput={(e) => {
-            setVal(e.target.value);
-          }}
-        ></input>
-        {/* <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
-          Check all user list
-        </button> */}
-        {errorText}
+      <div className="HomepageContainer">
+        <div className="button-div">
+          <p className="choose-difficulty-text">Choose a difficulty</p>
+          <div className="switch-field" onChange={chooseDifficulty}>
+            <input className="radio-input" type="radio" id="radio-three" name="switch-two" value="easy" />
+            <label htmlFor="radio-three">Easy</label>
+            <input className="radio-input" type="radio" id="radio-four" name="switch-two" value="medium" />
+            <label htmlFor="radio-four">Medium</label>
+            <input className="radio-input" type="radio" id="radio-five" name="switch-two" value="test" />
+            <label htmlFor="radio-five">Test</label>
+          </div>
+          <button className="main" onClick={() => createGame()}>
+            Create Game
+          </button>
+        </div>
+        <div className="button-div">
+          <div className="error-text">{errorText}</div>
+          <input
+            className="JoinGameInput radio-input"
+            placeholder="Enter game code"
+            value={val}
+            onInput={(e) => {
+              setVal(e.target.value);
+            }}
+          ></input>
+          <button className="main" onClick={() => joinGame()}>
+            Join Game
+          </button>
+        </div>
       </div>
     </div>
   );
+
+  // return (
+  //   <div className="HomepageContainer">
+  //     <div className="CreateGameContainer">
+  //       <button className="JoinCreateBtn" onClick={() => createGame()}>
+  //         Create Game
+  //       </button>
+  //     </div>
+  //     <div onChange={chooseDifficulty}>
+  //       <div>
+  //         <input type="radio" value="easy" name="gender" /> Easy
+  //       </div>
+  //       <div>
+  //         <input type="radio" value="medium" name="gender" /> Med
+  //       </div>
+  //       <div>
+  //         <input type="radio" value="test" name="gender" /> test
+  //       </div>
+  //     </div>
+
+  //     <div className="JoinGameContainer">
+  //       <button className="JoinCreateBtn" onClick={() => joinGame()}>
+  //         Join Game
+  //       </button>
+
+  //       <input
+  //         className="JoinGameInput"
+  //         placeholder="Enter game code"
+  //         value={val}
+  //         onInput={(e) => {
+  //           setVal(e.target.value);
+  //         }}
+  //       ></input>
+
+  //       {errorText}
+  //     </div>
+  //   </div>
+  // );
 }
 
 export default Homepage;

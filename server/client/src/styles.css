@@ -413,7 +413,7 @@ td:nth-child(3n + 1) {
 
 /*Material Design*/
 .body {
-  width: 95%;
+  width: 100%;
   max-width: 800px;
   margin: 0px auto 16px auto;
   display: flex;
@@ -542,4 +542,11 @@ td:nth-child(3n + 1) {
 }
 .slideThree input[type="checkbox"]:checked + label {
   left: 43px;
+}
+
+.noting-instruction {
+  display: flex;
+  font-size: 9px;
+  justify-content: center;
+  margin-top: -15px;
 }

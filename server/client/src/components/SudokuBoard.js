@@ -4,8 +4,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import e from "cors";
 import { parse } from "query-string";
-const socket = io.connect("http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let sudokuBoxOnClickHighlighting = [
   ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 
@@ -60,7 +60,7 @@ const SudokuBoard = (props) => {
   let [clickedCell, setclickedCell] = useState();
   let copyBoard;
   let [notingObj, setNotingObj] = useState({});
-  let [newValue, setnewValue] = useState();
+  let [shiftNoting, setshiftNoting] = useState(false);
 
   //~ Alert the user when they try to reresh the page
   // useEffect(() => {
@@ -96,7 +96,7 @@ const SudokuBoard = (props) => {
       });
       return console.log("SOLVED YO");
     } else {
-      setmessageAlerts("Board not finished");
+      setmessageAlerts("Board not correct");
     }
   };
 
@@ -138,12 +138,6 @@ const SudokuBoard = (props) => {
     let squareToHiglight = [];
     let cellsToHilight = [];
     let numberClicked = clickedCell.target.value;
-    //? UseRef????
-    //for cell 40 i need cells:
-    //rows = 00 10 20 30 40 50 60 70 80
-    //cols = 40 41 42 43 44 45 46 47 48
-    //square = object
-    // console.log("clickedCell row cell =", row.toString() + cell.toString());
 
     //^square loop
     sudokuBoxOnClickHighlighting.map((k) => {
@@ -188,11 +182,19 @@ const SudokuBoard = (props) => {
 
   const isNoting = () => {
     setNoting(!noting);
+    setshiftNoting(!shiftNoting);
   };
 
   const updateNote = (e) => {
     console.log("Updating note");
     setNotingValue(e);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      setshiftNoting(!shiftNoting);
+      setNoting(!noting);
+    }
   };
 
   //! BUG - can't delete all notes, when the last number is deleted it defaults back to all
@@ -263,6 +265,16 @@ const SudokuBoard = (props) => {
                                     });
                                   }
                                 }}
+                                onKeyPress={(e) => {
+                                  handleKeyPress(e);
+                                  if (e.target.value !== "") {
+                                    console.log("noting true onBlur");
+                                    let cell = key.toString() + k.toString();
+                                    let updateobj = {};
+                                    updateobj[cell] = e.target.value;
+                                    setNotingObj({ ...notingObj, ...updateobj });
+                                  }
+                                }}
                                 onClick={(e) => {
                                   console.log("onClick noting true");
                                   console.log("notingObj is ", notingObj);
@@ -296,30 +308,14 @@ const SudokuBoard = (props) => {
                           notingObj.hasOwnProperty(key.toString() + k.toString()) ? (
                             <input
                               className={!notingObj.hasOwnProperty(key.toString() + k.toString()) ? "noting" : ""}
-                              // className=""
                               key={""}
                               id={highlighted.includes(key.toString() + k.toString()) ? "highlight" : ""}
                               type="text"
                               maxLength="1"
                               disabled={false}
                               placeholder={notingObj[key.toString() + k.toString()]}
-                              onInput={(e) => {
-                                //? trying to remove from placeholder object
-                                // document.getElementsByClassName(key.toString() + k.toString()).removeAttribute("key");
-                                // setnewValue(e.target.value);
-                                // if (e.target.value !== "") {
-                                //   //TODO - I added this in and commented below out 16/11/21
-                                //   updateBoard(e, key, k);
-                                //   //TODO - commented below out
-                                //   // let cell = key.toString() + k.toString();
-                                //   // let updateobj = {};
-                                //   // updateobj[cell] = e.target.value;
-                                //   // setNotingObj({ ...notingObj, ...updateobj });
-                                // } else {
-                                //   console.log("e.target.value is '' ");
-                                // }
-                                // updateBoard(e, key, k);
-                                // console.log("row", key, " cell", k, "which contained", playingBoard[key][k], " updated to ", e.target.value);
+                              onKeyPress={(e) => {
+                                handleKeyPress(e);
                               }}
                               onClick={(e) => {
                                 // console.log("clicked cell is: ", key.toString() + k.toString());
@@ -344,6 +340,9 @@ const SudokuBoard = (props) => {
                               disabled={false}
                               // defaultValue={newValue ? newValue : ""}
                               // placeholder="he"
+                              onKeyPress={(e) => {
+                                handleKeyPress(e);
+                              }}
                               onInput={(e) => {
                                 // updateBoard(e, key, k);
                                 // console.log("row", key, " cell", k, "which contained", playingBoard[key][k], " updated to ", e.target.value);
@@ -390,10 +389,11 @@ const SudokuBoard = (props) => {
               </div>
               <div className="ondisplay">
                 <div className="slideThree">
-                  <input type="checkbox" value="None" id="slideThree" name="check" unchecked="true" onClick={() => isNoting()} />
+                  <input type="checkbox" value="None" id="slideThree" name="check" checked={shiftNoting ? true : false} onChange={() => isNoting()} />
                   <label htmlFor="slideThree"></label>
                 </div>
               </div>
+              <span className="noting-instruction">or select cell and press Enter</span>
             </li>
 
             <li>
@@ -407,7 +407,7 @@ const SudokuBoard = (props) => {
             </li>
             <li>
               <div className="vertical-adjust">
-                <i class="fas fa-check"></i>
+                <i className="fas fa-check"></i>
                 <span>&nbsp; Press when done</span>
                 <button id="finished-button" className="timer main" onClick={() => checkFinish()}>
                   Finished

@@ -4,13 +4,10 @@ import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActio
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import "../styles.css";
-const socket = io.connect("http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
-
-//TODO MAIN - Sudoku board passed as props to usehistory, get it to emit to other player in room and start with same board
-//TODO  - Figure out why certain things trigger so many useEffect functions, Is this a bad thing?
 
 function CreateGame() {
   const location = useLocation();
@@ -37,25 +34,15 @@ function CreateGame() {
     } else if (chosenDifficulty === "test") {
       dispatch(getTest());
     }
-
-    // console.log("----- USE EFFECT CALL GET ALL USERS IN CREATEGAME ----------");
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("----- CREATEGAME JOIN ROOM USE EFFECT CALL ----------");
     socket.emit("join_room", { room: roomId }, (error) => {
-      console.log("emit joinroom name," + roomId);
       if (error) console.log("ERROR CREATING ROOM");
     });
 
-    //TODO - Remove from the list when user disconnects from creategame
     return function cleanup() {
-      // socket.disconnect(); --- this causes the can't create room again error
-      // console.log("MOVED TO GAME IS ", movedToGame);
-      console.log("DOES REFRESHING TRIGGER THIS - CREATEGAME");
-
       if (!movedToGame) {
-        console.log("CLEANUP INITIATED");
         //shut down connnection instance
         socket.off();
       }

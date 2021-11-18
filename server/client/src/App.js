@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import SudokuBoard from "./components/SudokuBoard";
@@ -16,7 +16,7 @@ import Result from "./components/Result";
 // });
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   return (
     <>

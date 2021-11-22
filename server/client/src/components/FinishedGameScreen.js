@@ -3,13 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium } from "../actions/sudokuActions";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
-let movedToGame = false;
+import { prod } from "../prod";
 
-//! IT WOORRRRRRRRRRRKS - But it doesnt update the store, is that an issue?
-//TODO MAIN - Sudoku board passed as props to usehistory, get it to emit to other player in room and start with same board
-//TODO  - Figure out why certain things trigger so many useEffect functions, Is this a bad thing?
+const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
+let movedToGame = false;
 
 function CreateGame() {
   const location = useLocation();

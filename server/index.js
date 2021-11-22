@@ -10,11 +10,8 @@ import { addUser, removeUser, getUser, getUsersInRoom, getDataInUserList } from 
 import path from "path";
 
 dotenv.config();
-
 console.log();
-
 const app = express();
-
 const server = createServer(app); //for server to handle socket.io
 const __dirname = path.resolve();
 app.use(express.json({ limit: "30mb", extended: true })); //every requrest that comes in will go through this middleware and be converted to JSON

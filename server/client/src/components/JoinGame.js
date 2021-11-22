@@ -4,9 +4,10 @@ import { getAllUsers } from "../actions/sudokuActions";
 import { io } from "socket.io-client";
 import queryString from "query-string";
 import { useHistory, Link, useLocation } from "react-router-dom";
+import { prod } from "../prod";
 
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
 

@@ -4,10 +4,13 @@ import { io } from "socket.io-client";
 import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
 import * as api from "../api";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+import { prod } from "../prod";
+
+const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 
 function Homepage() {
+  console.log(prod);
   const [val, setVal] = useState("");
   const [roomFull, setRoomFull] = useState(false);
   const [difficulty, setDifficulty] = useState("");

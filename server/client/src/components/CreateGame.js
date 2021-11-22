@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-import "../styles.css";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+import { prod } from "../prod";
+
+const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
 

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import "../styles.css";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-import e from "cors";
 import { parse } from "query-string";
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://sudoku1v1.herokuapp.com");
+import { prod } from "../prod";
+
+const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let sudokuBoxOnClickHighlighting = [
   ["00", "01", "02", "10", "11", "12", "20", "21", "22"],
 
@@ -196,7 +197,9 @@ const SudokuBoard = (props) => {
       setNoting(!noting);
     }
   };
-
+  const fillBoard = () => {
+    setplayingBoard([...finishedBoard]);
+  };
   //! BUG - can't delete all notes, when the last number is deleted it defaults back to all
 
   return (
@@ -422,6 +425,9 @@ const SudokuBoard = (props) => {
               <div id="timer" className="prompt-text">
                 {messageAlerts}
               </div>
+            </li>
+            <li>
+              <button onClick={() => fillBoard()}></button>
             </li>
           </ul>
         </div>

@@ -11,6 +11,7 @@ const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://loc
 let movedToGame = false;
 let currentUser = {};
 
+
 //! Joingame renders 1 time, then 2 times, then 3 times, then 4 times and so on
 //! See Below
 

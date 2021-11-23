@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
   "engines": {
     "node": "16.3.0"
   },
@@ -24,5 +23,7 @@
     "mongoose": "^6.0.4",
     "nodemon": "^2.0.12",
     "socket.io": "^4.2.0"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }

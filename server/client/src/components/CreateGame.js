@@ -7,7 +7,6 @@ import { prod } from "../prod";
 
 const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
 
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
 
@@ -97,7 +96,8 @@ function CreateGame() {
       // console.log("currentUser is: ", currentUser.name);
       if (payload === currentUser.name) {
         console.log("Disconnect?");
-        socket.disconnect();
+        // socket.disconnect();
+        socket.off()
         history.push({
           pathname: `/result`,
           search: `?Winner`,
@@ -107,7 +107,8 @@ function CreateGame() {
         });
       } else {
         console.log("Disconnect?");
-        socket.disconnect();
+        // socket.disconnect();
+        socket.off()
         history.push({
           pathname: `/result`,
           search: `?Loser`,

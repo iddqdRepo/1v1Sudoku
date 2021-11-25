@@ -7,7 +7,6 @@ import { useHistory, Link, useLocation } from "react-router-dom";
 import { prod } from "../prod";
 
 const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 let movedToGame = false;
 let currentUser = {};
 
@@ -90,7 +89,7 @@ function JoinGame(props) {
       // console.log("winner is ", payload, " winner is ", currentUser.name);
       if (payload === currentUser.name) {
         console.log("Disconnect?");
-        socket.disconnect();
+        socket.off();
         history.push({
           pathname: `/result`,
           search: `?Winner`,
@@ -100,7 +99,7 @@ function JoinGame(props) {
         });
       } else {
         console.log("Disconnect?");
-        socket.disconnect();
+        socket.off();
         history.push({
           pathname: `/result`,
           search: `?Loser`,

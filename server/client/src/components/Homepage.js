@@ -3,24 +3,19 @@ import { useHistory, Link } from "react-router-dom";
 import { io } from "socket.io-client";
 import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
-import * as api from "../api";
 import { prod } from "../prod";
 
 const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 
 function Homepage() {
-  console.log(prod);
   const [val, setVal] = useState("");
   const [roomFull, setRoomFull] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [errorText, seterrorText] = useState("");
-
   let history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("dispatching homepage getRoom");
     dispatch(getRoom()); //dispatching the action from ./actions/posts - redux
     // dispatch(getAllUsers());
   }, [dispatch]);
@@ -102,7 +97,7 @@ function Homepage() {
         <br />
         Each player gets served the exact same board. <br />
         <br />
-        Good Luck.
+        Have Fun.
       </div>
 
       <div className="HomepageContainer">

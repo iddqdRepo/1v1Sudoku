@@ -224,6 +224,7 @@ const SudokuBoard = (props) => {
                           <input
                             id={highlighted.includes(key.toString() + k.toString()) ? "highlight" : ""}
                             type="text"
+                            autoComplete="off"
                             maxLength="1"
                             // readOnly
                             defaultValue={v.toString()}
@@ -255,6 +256,7 @@ const SudokuBoard = (props) => {
                                 // className={notingObj.hasOwnProperty(key.toString() + k.toString()) ? "noting" : ""}
                                 className="noting"
                                 type="text"
+                                autoComplete="off"
                                 maxLength="5"
                                 disabled={false}
                                 defaultValue={notingObj.hasOwnProperty(key.toString() + k.toString()) ? notingObj[key.toString() + k.toString()] : ""}
@@ -314,6 +316,7 @@ const SudokuBoard = (props) => {
                               key={""}
                               id={highlighted.includes(key.toString() + k.toString()) ? "highlight" : ""}
                               type="text"
+                              autoComplete="off"
                               maxLength="1"
                               disabled={false}
                               placeholder={notingObj[key.toString() + k.toString()]}
@@ -339,6 +342,7 @@ const SudokuBoard = (props) => {
                               id={highlighted.includes(key.toString() + k.toString()) ? "highlight" : ""}
                               // className={"noting" ? "yes" : "no"}
                               type="text"
+                              autoComplete="off"
                               maxLength="1"
                               disabled={false}
                               // defaultValue={newValue ? newValue : ""}

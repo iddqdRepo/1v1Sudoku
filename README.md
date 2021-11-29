@@ -4,7 +4,7 @@ The main reason for this app was to, honestly, prove to my wife I was, once and 
 
 ## ✨ Features
 - Both players get served identical boards for fairness
-- Real time winner/loser prompts (when a user finished a board, it sends both users to a "winner/loser page"
+- Real time winner/loser prompts (when a user finishes a board, it instantly sends both users to a "winner/loser page"
 - Sudoku board noting toggle
 - Board difficulty selection
 - Click cell companion number, row, square highlighting

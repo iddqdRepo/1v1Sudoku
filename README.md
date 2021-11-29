@@ -22,5 +22,3 @@ https://sudoku1v1.herokuapp.com/
 - [socketIO]()
 - [Redux]()
 
-## 📝 License
-[MIT](https://github.com/sir-nutty/myChaldea-UI/blob/main/LICENSE)

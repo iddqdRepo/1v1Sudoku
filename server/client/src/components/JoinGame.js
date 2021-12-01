@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers } from "../actions/sudokuActions";
 import { io } from "socket.io-client";
 import queryString from "query-string";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { prod } from "../prod";
+import { SocketContext } from "../context";
 
-const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
 let movedToGame = false;
 let currentUser = {};
 
@@ -15,6 +16,7 @@ let currentUser = {};
 //! See Below
 
 function JoinGame(props) {
+  const socket = useContext(SocketContext)
   const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]); //! Unmounted component
   // const [currentUser, setCurrentUser] = useState({});
   const roomCodeData = queryString.parse(props.location.search).roomCode;
@@ -45,17 +47,17 @@ function JoinGame(props) {
     };
   }, []);
 
-  const alertUser = (e) => {
-    console.log("joinGame alertUser");
-    e.preventDefault();
-    e.returnValue = "";
-  };
-  useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    return () => {
-      window.removeEventListener("beforeunload", alertUser);
-    };
-  }, []);
+  // const alertUser = (e) => {
+  //   console.log("joinGame alertUser");
+  //   e.preventDefault();
+  //   e.returnValue = "";
+  // };
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", alertUser);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", alertUser);
+  //   };
+  // }, []);
 
   useEffect(() => {
     console.log("----- JOINGAME USE EFFECT CALL ----------");
@@ -110,7 +112,6 @@ function JoinGame(props) {
       }
       // if (error) return console.log("ERROR FINISHING GAME");
     });
-    //TODO - current user is an empty array?
     socket.on("startGameData", (sudokuBoard) => {
       console.log("ON STARTGAMEDATA " + roomId, " - joingame");
       // console.log("JOIN GAME DATA ", { sudokuBoard, currentUser });
@@ -169,9 +170,9 @@ function JoinGame(props) {
           <div></div>
           <div></div>
         </div>
-        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
+        {/* <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
           Check users in room
-        </button>
+        </button> */}
         <div className="Waiting">Waiting for Player 1 to start the game</div>
       </div>
     </div>
@@ -188,24 +189,6 @@ function JoinGame(props) {
           Home
         </button>
       </Link>
-    </div>
-  );
-  return (
-    <div>
-      <div className="CreateGamePageContainer">
-        <div className="CodeText">Joined Room:</div>
-        <div className="Code">{roomCodeData}</div>
-        <div className="Loading-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <button className="JoinCreateBtn" onClick={() => checkAllUser()}>
-          Check users in room
-        </button>
-        <div className="Waiting">Waiting for Player 1 to start the game</div>
-      </div>
     </div>
   );
 }

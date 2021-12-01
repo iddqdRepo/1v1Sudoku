@@ -7,8 +7,9 @@
 
 html,
 body {
-  /* background-color: rgb(235, 235, 240); */
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIUlEQVQYV2N89urtfwYiACNIoZSYMCMhtaMK8YYQ0cEDAG5yJ8eLRhTfAAAAAElFTkSuQmCC) repeat;
+  background-color: #102A43;
+  color: #F0F4F8
+  /* background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIUlEQVQYV2N89urtfwYiACNIoZSYMCMhtaMK8YYQ0cEDAG5yJ8eLRhTfAAAAAElFTkSuQmCC) repeat; */
 }
 
 /* !Homepage styles */
@@ -163,7 +164,7 @@ button,
 button {
   color: #61677c;
   font-weight: bold;
-  box-shadow: -5px -5px 20px #fff, 5px 5px 20px #babecc;
+  box-shadow: -2px -2px 10px #fff, 2px 2px 10px #babecc;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   font-weight: 600;
@@ -230,7 +231,7 @@ button.main {
 
 .switch-field label {
   background-color: #e4e4e4;
-  color: rgba(0, 0, 0, 0.6);
+  color: #102A43;
   font-size: 14px;
   line-height: 1;
   text-align: center;
@@ -246,7 +247,7 @@ button.main {
 }
 
 .switch-field input:checked + label {
-  background-color: #a5dc86;
+  background-color: #9FB3C8;
   box-shadow: none;
 }
 
@@ -351,21 +352,21 @@ ul {
 }
 
 td {
-  border: 1px solid #c0cdd1;
+  border: 1px solid #102A43;
   /* box-shadow: 0px 0px 0px 1px #; */
   text-align: center;
   vertical-align: middle;
 }
 
 td input {
-  color: #000000;
+  color: #102A43;
   padding: 0;
   border: 0;
   text-align: center;
   width: 48px;
   height: 48px;
   font-size: 24px;
-  background-color: #ffffff;
+  background-color: #F0F4F8;
   outline: none;
   text-transform: uppercase;
   transition: all 0.5s;
@@ -375,23 +376,29 @@ input:disabled {
 }
 
 tbody:nth-child(3n) {
-  border-bottom: 4px solid #000000;
+  border-bottom: 4px solid #102A43;
 }
 
 tbody:nth-child(3n + 1) {
-  border-top: 4px solid #000000;
+  border-top: 4px solid #102A43;
 }
 
 td:nth-child(3n) {
-  border-right: 4px solid #000000;
+  border-right: 4px solid #102A43;
 }
 
 td:nth-child(3n + 1) {
-  border-left: 4px solid #000000;
+  border-left: 4px solid #102A43;
+}
+
+.blue{
+  color: red;
 }
 ::placeholder {
   font-size: 11px;
-  color: blue;
+  /* color: blue;
+  background-color: #102A43; */
+  color: #102A43
 }
 .noting {
   color: darkblue;
@@ -420,9 +427,10 @@ td:nth-child(3n + 1) {
 }
 
 .card {
-  background: #fff;
+  
+  background: #102A43;
   width: fit-content;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 4px 0 #ffffff;
   float: left;
   padding: 32px 32px 16px 32px;
 }
@@ -458,17 +466,17 @@ td:nth-child(3n + 1) {
 }
 
 .timer {
-  color: #1565c0;
+  color: #d9e2ec;
   font-size: 32px;
   padding: 4px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 4px 0 #ffffff;
   text-align: center;
 }
 .prompt-text {
-  color: #1565c0;
+  color: #d9e2ec;
   font-size: 17px;
   padding: 4px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 4px 0 #ffffff;
   text-align: center;
 }
 
@@ -489,7 +497,7 @@ td:nth-child(3n + 1) {
 }
 
 #highlight {
-  background-color: #d9dbe2;
+  background-color: #bcccdc;
 }
 
 /*! Sudoku noting button */
@@ -546,7 +554,7 @@ td:nth-child(3n + 1) {
 
 .noting-instruction {
   display: flex;
-  font-size: 9px;
+  font-size: 10px;
   justify-content: center;
   margin-top: -15px;
 }

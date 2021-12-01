@@ -1,36 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActions";
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { prod } from "../prod";
-
-const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+import { SocketContext } from "../context";
 
 let movedToGame = false;
 let currentUser = {};
 
 function CreateGame() {
+  const socket = useContext(SocketContext)
   const location = useLocation();
   const dispatch = useDispatch();
   const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]);
-  // const [currentUser, setCurrentUser] = useState([]);
-  // const [chosenDifficulty, setChosenDifficulty] = useState("")
   let chosenDifficulty = location.state.detail;
-  // let allUsersTestCheck = useSelector((state) => state.allUserDataReducer);
   let roomId = useSelector((state) => state.roomCodeReducer);
   let history = useHistory();
   let sudokuBoard = useSelector((state) => state.sudokuReducers);
-  console.log("SUDOKU BOARD IS: ", sudokuBoard);
 
   useEffect(() => {
-    console.log("User close difficulty: ", chosenDifficulty);
     dispatch(getAllUsers());
     if (chosenDifficulty === "easy") {
-      console.log("CHOSEN DIFFICULTY IS EASY - DISPATCHING EASY");
       dispatch(getEasy());
     } else if (chosenDifficulty === "medium") {
-      console.log("CHOSEN DIFFICULTY IS MEDIUM - DISPATCHING MEDIUM");
       dispatch(getMedium());
     } else if (chosenDifficulty === "test") {
       dispatch(getTest());
@@ -44,35 +38,29 @@ function CreateGame() {
 
     return function cleanup() {
       if (!movedToGame) {
-        //shut down connnection instance
         socket.off();
       }
     };
   }, []);
 
-  const alertUser = (e) => {
-    console.log("createGame alertUser");
-    e.preventDefault();
-    e.returnValue = "";
-  };
 
   useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
-    return () => {
-      window.removeEventListener("beforeunload", alertUser);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("----- CREATEGAME USE EFFECT CALL ----------");
-    //? When the room is created on the server, it emits the data (from server to client instead of client to server) with "io.to(newUser.room).emit("roomData")"
+        //? When the room is created on the server, it emits the data (from server to client instead of client to server) with "io.to(newUser.room).emit("roomData")"
     //? This socket.on grabs that emitted roomData and stores it in the useState variable here
     //? This gives me access to the data of the users that are in the current room
     //? socket.emit and socket.on seems to be able to go both ways, emitted from client, or server, which is cool
     socket.on("roomData", (UserRoomData) => {
       console.log("socket.on(roomData - creategame");
-      setRoomAndUsersInRoom(UserRoomData);
-      // console.log("UserRoomData : ", UserRoomData);
+      console.log("UserRoomData.room ", UserRoomData.room)
+      //^ Check the room isn't empty (happens on page refresh)
+      if(Object.keys(UserRoomData.room).length === 0){
+        socket.off()
+        history.push({
+          pathname: `/`,
+        });
+      }else{
+        setRoomAndUsersInRoom(UserRoomData);
+      }
     });
 
     socket.on("currentUserData", (currUser) => {
@@ -87,16 +75,15 @@ function CreateGame() {
       // setCurrentUser(currUser);
       // console.log("message = ", msg);
     });
-  }, []);
 
-  useEffect(() => {
     socket.on("endgameemit", (payload) => {
       // console.log("socket.on(end_game_emit - SudokuBoard");
       // console.log(payload, " has won");
       // console.log("currentUser is: ", currentUser.name);
+      //^ If the user refreshes the page, take them back to the homepage
       if (payload === currentUser.name) {
         console.log("Disconnect?");
-        // socket.disconnect();
+        socket.disconnect();
         socket.off()
         history.push({
           pathname: `/result`,
@@ -121,33 +108,14 @@ function CreateGame() {
     });
   }, []);
 
-  // console.log("CreateRoom setUsersRooms is ", roomAndUsersInRoom);
-  // console.log("CreateRoom current user is ", currentUser);
-
-  let checkAllUser = () => {
-    // console.log("-----TESTING-----");
-    // console.log("users: ", roomAndUsersInRoom);
-    // console.log("Current User: ", currentUser);
-    //TODO Make it dispatch and check the contents of the room from the store
-    let countUsersInRoom = roomAndUsersInRoom.users.length;
-    let userusers = countUsersInRoom < 2 ? "user" : "users";
-    console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, userusers, " in it");
-  };
-
   let startGame = () => {
     console.log("-----START GAME-----");
+    console.log("room is ", roomId)
     movedToGame = true;
-    // console.log("users: ", roomAndUsersInRoom);
-    // console.log("Current User: ", currentUser);
-    //TODO Make it dispatch and check the contents of the room from the store
-    let countUsersInRoom = roomAndUsersInRoom.users.length;
-    // console.log(roomAndUsersInRoom.room, "has ", countUsersInRoom, "users in it");
-
     socket.emit("start_game", sudokuBoard, (error) => {
       console.log("EMIT START_GAME " + roomId, " - creategame");
       if (error) return console.log("ERROR STARTING GAME");
     });
-    // history.push();
     history.push({
       pathname: `/sudoku`,
       search: `?roomCode=${roomId}`,
@@ -157,7 +125,6 @@ function CreateGame() {
     });
   };
 
-  // let roomId = "creategame";
   return roomAndUsersInRoom.users === undefined ? (
     <>
       <div className="Loading-ring">

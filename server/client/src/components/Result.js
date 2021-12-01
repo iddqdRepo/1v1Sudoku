@@ -1,12 +1,14 @@
-import { useHistory, useLocation } from "react-router";
-import React, { useState } from "react";
+import { useLocation } from "react-router";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
 import { prod } from "../prod";
+import { SocketContext } from "../context";
 
-const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
 // const socket = io.connect("https://sudoku1v1.herokuapp.com");
 const WinnerLoser = (props) => {
+  const socket = useContext(SocketContext)
   const location = useLocation();
   const winner = location.state.detail.winner;
   console.log("winner is", winner);

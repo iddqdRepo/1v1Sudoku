@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useHistory, Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import { getRoom, getAllUsers } from "../actions/sudokuActions";
 import { useDispatch, useSelector } from "react-redux";
 import { prod } from "../prod";
+import { SocketContext } from "../context";
 
-const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
 
 function Homepage() {
+  const socket = useContext(SocketContext)
   const [val, setVal] = useState("");
-  const [roomFull, setRoomFull] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [errorText, seterrorText] = useState("");
   let history = useHistory();
@@ -27,7 +28,7 @@ function Homepage() {
       if (error) console.log("ERROR CHECK_ROOM");
     });
 
-    console.log("difficulty selected = ", difficulty);
+    // console.log("difficulty selected = ", difficulty);
 
     if (!difficulty) {
       return console.log("please select a difficulty");
@@ -108,8 +109,8 @@ function Homepage() {
             <label htmlFor="radio-three">Easy</label>
             <input className="radio-input" type="radio" id="radio-four" name="switch-two" value="medium" />
             <label htmlFor="radio-four">Medium</label>
-            <input className="radio-input" type="radio" id="radio-five" name="switch-two" value="test" />
-            <label htmlFor="radio-five">Test</label>
+            {/* <input className="radio-input" type="radio" id="radio-five" name="switch-two" value="test" />
+            <label htmlFor="radio-five">Test</label> */}
           </div>
           <button className="main" onClick={() => createGame()}>
             Create Game

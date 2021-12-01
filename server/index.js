@@ -8,6 +8,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { addUser, removeUser, getUser, getUsersInRoom, getDataInUserList } from "./users.js";
 import path from "path";
+import {instrument} from "@socket.io/admin-ui"
 
 dotenv.config();
 console.log();
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 const io = new Server(server, {
   cors: {
-    origins: ["*"],
+    origins: ["*", "https://admin.socket.io/"],
     handlePreflightRequest: (req, res) => {
       res.writeHead(200, {
         "Access-Control-Allow-Origin": "*",
@@ -70,10 +71,11 @@ io.on("connection", (socket) => {
     console.log("user is: ", user);
     // const userRoom = user.room;
 
-    if (user) {
+    // if (user) {
+      //! Why is this not emitting when a user creates a game, refreshes and goes as normal, game doesnt start for other player
       io.in(user.room).emit("startGameData", payload);
       console.log("user true, user is: ", user);
-    }
+    // }
   });
 
   socket.on("end_game", (payload) => {
@@ -113,6 +115,7 @@ io.on("connection", (socket) => {
     io.emit("message", `${socket.id} has left the game`);
   });
 });
+instrument(io, {auth: false})
 
 //client middleware for Heroku
 if (process.env.NODE_ENV === "production") {

@@ -2,8 +2,12 @@ const users = [];
 
 export const addUser = ({ userId, username, room }) => {
   const numUsersInRoom = users.filter((user) => user.room === room).length;
+  console.log("room is ", room)
   if (numUsersInRoom === 2) {
     return { error: "Room Full" }; //if the room is full return the error
+  }else if(Object.keys(room).length === 0 ){
+    console.log("No Room - Refreshed?")
+    return { error: "No Room - Refreshed?" }
   }
 
   const newUser = { userId, username, room };

@@ -339,9 +339,9 @@ const SudokuBoard = (props) => {
                 {messageAlerts}
               </div>
             </li>
-            <li>
+            {/* <li>
               <button onClick={() => fillBoard()}></button>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

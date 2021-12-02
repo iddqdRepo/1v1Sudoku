@@ -5,29 +5,38 @@ import { io } from "socket.io-client";
 import { prod } from "../prod";
 import { SocketContext } from "../context";
 
-// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
 const WinnerLoser = (props) => {
+  const url = (prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:3000")
   const socket = useContext(SocketContext)
   const location = useLocation();
   const winner = location.state.detail.winner;
+  // let history = useHistory();
+
   console.log("winner is", winner);
 
+// const returnToHome = () =>
+// {
+//   socket.off()
+//   history.push({
+//     pathname: `/`,
+//   });
+// }
+// onClick={() => {returnToHome()}}
   return (
     <>
       {winner ? (
         <div className="CreateGamePageContainer">
           <div className="CodeText">YOU WIN!</div>
-          <Link to="/">
-            <button className="JoinCreateBtn">Home</button>
-          </Link>
+          <a href={url}>
+            <button className="JoinCreateBtn" >Home</button>
+          </a>
         </div>
       ) : (
         <div className="CreateGamePageContainer">
           <div className="CodeText">YOU LOSE!</div>
-          <Link to="/">
-            <button className="JoinCreateBtn">Home</button>
-          </Link>
+          <a href={url}>
+            <button className="JoinCreateBtn" >Home</button>
+          </a>
         </div>
       )}
     </>

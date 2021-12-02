@@ -10,6 +10,9 @@ import { SocketContext } from "../context";
 let movedToGame = false;
 let currentUser = {};
 
+//! Creategame on creating a room > refreshing > it joins the user to a blank room instead of just resetting it
+//! So it must be emitting join_room when the page is refreshed, make it so it doesn't do this if the room is blank
+
 function CreateGame() {
   const socket = useContext(SocketContext)
   const location = useLocation();
@@ -33,7 +36,15 @@ function CreateGame() {
 
   useEffect(() => {
     socket.emit("join_room", { room: roomId }, (error) => {
-      if (error) console.log("ERROR CREATING ROOM");
+      if (error){
+        //^ If the room is empty (happens on page refresh in creategame room)
+        //^ Kick user to homePage
+        // console.log("ERROR CREATING ROOM");
+        socket.off()
+        history.push({
+          pathname: `/`,
+        });
+      } 
     });
 
     return function cleanup() {
@@ -52,15 +63,8 @@ function CreateGame() {
     socket.on("roomData", (UserRoomData) => {
       console.log("socket.on(roomData - creategame");
       console.log("UserRoomData.room ", UserRoomData.room)
-      //^ Check the room isn't empty (happens on page refresh)
-      if(Object.keys(UserRoomData.room).length === 0){
-        socket.off()
-        history.push({
-          pathname: `/`,
-        });
-      }else{
+
         setRoomAndUsersInRoom(UserRoomData);
-      }
     });
 
     socket.on("currentUserData", (currUser) => {
@@ -83,7 +87,7 @@ function CreateGame() {
       //^ If the user refreshes the page, take them back to the homepage
       if (payload === currentUser.name) {
         console.log("Disconnect?");
-        socket.disconnect();
+        // socket.disconnect();
         socket.off()
         history.push({
           pathname: `/result`,

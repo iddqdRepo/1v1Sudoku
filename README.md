@@ -9,16 +9,22 @@ The main reason for this app was to, honestly, prove to my wife I was, once and 
 - Board difficulty selection
 - Click cell companion number, row, square highlighting
 
+![sudoku1v1CellHighlighting](https://i.gyazo.com/71391fc2f1a7263848edf97e827debcc.png)
+
 
 ## ▶️ Demo
+Thank you everyone that played.
+Unfortunately the Demo is no longer available. (Heroku is shutting down free dynos)
 
-https://sudoku-vercel-test-zkh1.vercel.app/
+~~https://sudoku1v1.herokuapp.com/~~  
+
+
 
 ## 🚀 Technologies
 - [React](https://reactjs.org/)
 - [React Hooks](https://reactjs.org/docs/hooks-intro.html)
 - [React Router](https://reactrouter.com/web/guides/quick-start)
-- [mongoDB]()
-- [socketIO]()
-- [Redux]()
+- [mongoDB](https://www.mongodb.com/)
+- [socketIO](https://socket.io/)
+- [Redux](https://redux.js.org/)
 

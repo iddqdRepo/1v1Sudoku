@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { prod } from "../prod";
 import { SocketContext } from "../context";
 
-// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:5000");
 
 function Homepage() {
   const socket = useContext(SocketContext)

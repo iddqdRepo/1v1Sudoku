@@ -12,7 +12,7 @@ The main reason for this app was to, honestly, prove to my wife I was, once and 
 
 ## ▶️ Demo
 
-https://sudoku1v1.herokuapp.com/
+https://sudoku-vercel-test-zkh1.vercel.app/
 
 ## 🚀 Technologies
 - [React](https://reactjs.org/)

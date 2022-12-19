@@ -4,7 +4,7 @@ import { getAllUsers, getEasy, getMedium, getTest } from "../actions/sudokuActio
 import { useHistory, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { prod } from "../prod";
-// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:5000");
 import { SocketContext } from "../context";
 
 let movedToGame = false;
@@ -18,6 +18,7 @@ function CreateGame() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [roomAndUsersInRoom, setRoomAndUsersInRoom] = useState([]);
+  
   let chosenDifficulty = location.state.detail;
   let roomId = useSelector((state) => state.roomCodeReducer);
   let history = useHistory();

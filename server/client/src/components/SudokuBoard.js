@@ -6,7 +6,7 @@ import { parse } from "query-string";
 import { prod } from "../prod";
 import { SocketContext } from "../context";
 
-// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:5000");
 
 //^ Square locations to highlight based on where the player clicks
 let sudokuBoxOnClickHighlighting = [

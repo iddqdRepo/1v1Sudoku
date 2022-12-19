@@ -7,7 +7,7 @@ import { useHistory, Link, useLocation } from "react-router-dom";
 import { prod } from "../prod";
 import { SocketContext } from "../context";
 
-// const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
+// const socket = io.connect(prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:5000");
 let movedToGame = false;
 let currentUser = {};
 

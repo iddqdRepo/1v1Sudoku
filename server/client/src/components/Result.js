@@ -6,7 +6,7 @@ import { prod } from "../prod";
 import { SocketContext } from "../context";
 
 const WinnerLoser = (props) => {
-  const url = (prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:3000")
+  const url = (prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:3000")
   const socket = useContext(SocketContext)
   const location = useLocation();
   const winner = location.state.detail.winner;

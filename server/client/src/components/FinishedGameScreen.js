@@ -5,8 +5,8 @@ import { useHistory, Link, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { prod } from "../prod";
 
-const socket = io.connect(prod ? "https://sudoku1v1.herokuapp.com" : "http://localhost:5000");
-// const socket = io.connect("https://sudoku1v1.herokuapp.com");
+const socket = io.connect(prod ? "https://sudoku-vercel-test-zkh1.vercel.app" : "http://localhost:5000");
+// const socket = io.connect("https://sudoku-vercel-test-zkh1.vercel.app");
 let movedToGame = false;
 
 function CreateGame() {
